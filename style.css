@@ -1,41 +1,25 @@
 /* ===================================================
    CEREMONY REPORT — MISSION ROW
-   Professional / official document style
-   Landscape 1920×1080 — light background, navy accents
+   Style matching Vespucci: dark blue bg, golden
+   title boxes, white text, bold gold subcategories
+   1920×1080 landscape
    =================================================== */
 
 /* ---------- Reset ---------- */
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: #f0f0f4;
-    color: #333;
+    font-family: 'Inter', sans-serif;
+    background: #111;
+    color: #e0e0e0;
     min-height: 100vh;
     padding: 1.5rem;
 }
 
-/* ---------- Page Header (UI) ---------- */
-.page-header {
-    text-align: center;
-    margin-bottom: 1.5rem;
-}
-
-.page-header h1 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #1a2744;
-}
-
-.page-header .subtitle {
-    color: #6b7b95;
-    margin-top: 0.15rem;
-    font-size: 0.82rem;
-}
+/* ---------- UI Header ---------- */
+.page-header { text-align: center; margin-bottom: 1.5rem; }
+.page-header h1 { font-size: 1.3rem; font-weight: 700; color: #c8a84e; }
+.page-header .subtitle { color: #888; margin-top: 0.15rem; font-size: 0.82rem; }
 
 /* ---------- Layout ---------- */
 .layout {
@@ -53,54 +37,39 @@ body {
     top: 1.5rem;
     max-height: calc(100vh - 3rem);
     overflow-y: auto;
-    background: #fff;
+    background: #1a1a2a;
     border-radius: 8px;
     padding: 1.4rem;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    border: 1px solid #2a2a3a;
 }
-
 #editor-panel::-webkit-scrollbar { width: 4px; }
-#editor-panel::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+#editor-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 
-.form-group {
-    margin-bottom: 1rem;
-}
-
+.form-group { margin-bottom: 0.9rem; }
 .form-group label {
     display: block;
     margin-bottom: 0.3rem;
     font-weight: 600;
     font-size: 0.8rem;
-    color: #1a2744;
+    color: #c8a84e;
 }
-
 .form-group input,
 .form-group textarea {
     width: 100%;
     padding: 0.5rem 0.65rem;
-    border: 1px solid #d5d9e0;
+    border: 1px solid #2a2a3a;
     border-radius: 5px;
-    background: #fafbfc;
-    color: #333;
+    background: #12121f;
+    color: #ddd;
     font-family: 'Inter', sans-serif;
     font-size: 0.82rem;
-    transition: border-color 0.15s;
     resize: vertical;
 }
-
 .form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #1a2744;
-}
+.form-group textarea:focus { outline: none; border-color: #c8a84e; }
 
 /* ---------- Buttons ---------- */
-.btn-row {
-    display: flex;
-    gap: 0.6rem;
-    margin-top: 1.2rem;
-}
-
+.btn-row { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
 .btn {
     padding: 0.55rem 1.1rem;
     border: none;
@@ -109,37 +78,22 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s;
 }
-
-.btn-primary {
-    background: #1a2744;
-    color: #fff;
-}
-.btn-primary:hover { background: #263a5e; }
-
-.btn-secondary {
-    background: #e8eaef;
-    color: #555;
-}
-.btn-secondary:hover { background: #d5d9e0; }
+.btn-primary { background: #c8a84e; color: #111; }
+.btn-primary:hover { background: #d4b65c; }
+.btn-secondary { background: #2a2a3a; color: #888; }
+.btn-secondary:hover { background: #3a3a4a; color: #bbb; }
 
 /* ---------- Preview ---------- */
-#preview-panel {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    overflow-x: auto;
-}
-
+#preview-panel { flex: 1; display: flex; justify-content: center; overflow-x: auto; }
 #document-wrapper {
     border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
 }
 
 /* ==============================================
-   DOCUMENT — 1920×1080 landscape
+   THE DOCUMENT — 1920×1080
    ============================================== */
 #document {
     width: 1920px;
@@ -148,175 +102,153 @@ body {
     transform-origin: top left;
     position: relative;
     overflow: hidden;
-    background: #ffffff;
     font-family: 'Inter', sans-serif;
+
+    /* Dark blue gradient — matching Vespucci */
+    background: linear-gradient(160deg, #08101e 0%, #0c1a35 25%, #10224a 50%, #0c1a35 75%, #08101e 100%);
 }
 
-/* ---- Top bar (thin navy stripe) ---- */
-.doc-topbar {
-    height: 8px;
-    background: #1a2744;
+/* ---- Title box (golden rounded box) ---- */
+.doc-title-box {
+    position: absolute;
+    top: 38px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #d4b050, #b8922a);
+    border-radius: 10px;
+    padding: 13px 48px;
+    z-index: 5;
 }
 
-/* ---- Header ---- */
-.doc-header {
-    text-align: center;
-    padding: 40px 80px 25px;
-}
-
-.doc-dept {
-    font-size: 13px;
-    font-weight: 500;
-    color: #6b7b95;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-}
-
-.doc-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 38px;
+.doc-title-box span {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
     font-weight: 700;
-    color: #1a2744;
-    letter-spacing: 1px;
-    line-height: 1.2;
+    color: #0a0f1a;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
 }
 
-.doc-location {
-    font-size: 16px;
-    font-weight: 400;
-    color: #8a95a8;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 6px;
-}
-
+/* ---- Date ---- */
 .doc-date {
-    font-size: 15px;
-    font-weight: 500;
-    color: #1a2744;
-    margin-top: 10px;
+    position: absolute;
+    top: 108px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 21px;
+    color: #d4b050;
+    z-index: 5;
+    white-space: nowrap;
 }
 
-/* ---- Dividers ---- */
-.doc-divider {
-    height: 2px;
-    margin: 0 80px;
-    background: #1a2744;
+/* ---- Content grid ---- */
+.doc-main {
+    position: absolute;
+    top: 165px;
+    left: 55px;
+    right: 55px;
+    bottom: 25px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr auto auto;
+    gap: 16px 28px;
+    align-content: start;
+    z-index: 5;
 }
 
-.doc-divider-light {
-    height: 1px;
-    background: #d5d9e0;
+/* ---- Section blocks ---- */
+.doc-section {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Golden section header box */
+.doc-section-header {
+    background: linear-gradient(135deg, #d4b050, #b8922a);
+    border-radius: 8px;
+    padding: 7px 20px;
+    text-align: center;
     margin-bottom: 12px;
 }
 
-/* ---- Content area ---- */
-.doc-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    margin: 0 80px;
-    padding-top: 25px;
-    min-height: 660px;
-}
-
-/* ---- Sections ---- */
-.doc-section {
-    padding: 18px 30px;
-    border-bottom: 1px solid #e8eaef;
-    border-right: 1px solid #e8eaef;
-}
-
-.doc-section:nth-child(even) {
-    border-right: none;
-}
-
-.doc-section:nth-last-child(1),
-.doc-section:nth-last-child(2) {
-    border-bottom: none;
-}
-
-.doc-section.wide {
-    grid-column: 1 / -1;
-    border-right: none;
-}
-
-.doc-section-title {
-    font-size: 12px;
+.doc-section-header span {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
     font-weight: 700;
-    color: #1a2744;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #1a2744;
-    display: inline-block;
+    color: #0a0f1a;
 }
 
+/* Content text */
 .doc-section-content {
     font-size: 14.5px;
     font-weight: 400;
-    color: #333;
+    color: #ffffff;
     line-height: 1.75;
-    white-space: pre-line;
+    padding: 0 4px;
 }
+
+/* Bold golden subcategory headers (ALL CAPS lines) */
+.doc-subcategory {
+    font-weight: 800;
+    color: #d4b050;
+    font-size: 13.5px;
+    letter-spacing: 0.8px;
+    margin-top: 8px;
+    margin-bottom: 2px;
+}
+
+/* Spacer between groups */
+.doc-spacer { height: 6px; }
+
+/* Entry line */
+.doc-entry {
+    color: #ffffff;
+    font-size: 14.5px;
+    line-height: 1.75;
+}
+
+/* Rappel line (with dash) */
+.doc-rappel {
+    color: #ffffff;
+    font-size: 14.5px;
+    line-height: 1.85;
+    padding-left: 4px;
+}
+
+/* Grid placement — 3 column layout like Vespucci */
+/* Col 1: Rappels (full height) */
+/* Col 2: Promotions (full height) */
+/* Col 3: Convocations top, Arrivées mid, Départs bottom */
+.doc-section.col-rappels      { grid-column: 1; grid-row: 1 / 4; }
+.doc-section.col-promotions   { grid-column: 2; grid-row: 1 / 4; }
+.doc-section.col-convocations { grid-column: 3; grid-row: 1; }
+.doc-section.col-arrivees     { grid-column: 3; grid-row: 2; }
+.doc-section.col-departs      { grid-column: 3; grid-row: 3; }
 
 /* ---- Placeholder ---- */
 .doc-placeholder {
     grid-column: 1 / -1;
-    color: #bbb;
+    color: rgba(255,255,255,0.15);
     font-style: italic;
     text-align: center;
-    font-size: 16px;
-    padding: 200px 0;
-}
-
-/* ---- Footer ---- */
-.doc-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0 80px 20px;
-    text-align: center;
-}
-
-.doc-footer p {
-    font-size: 10.5px;
-    color: #999;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 18px;
+    padding: 280px 0;
 }
 
 /* ==============================================
    RESPONSIVE
    ============================================== */
-@media (max-width: 1400px) {
-    #document { transform: scale(0.45); }
-}
-
+@media (max-width: 1400px) { #document { transform: scale(0.45); } }
 @media (max-width: 1100px) {
-    .layout {
-        flex-direction: column;
-        align-items: center;
-    }
+    .layout { flex-direction: column; align-items: center; }
     #editor-panel {
-        flex: none;
-        width: 100%;
-        max-width: 500px;
-        position: static;
-        max-height: none;
-        overflow-y: visible;
+        flex: none; width: 100%; max-width: 500px;
+        position: static; max-height: none; overflow-y: visible;
         margin-bottom: 1.5rem;
     }
-    #preview-panel {
-        width: 100%;
-        overflow-x: auto;
-    }
+    #preview-panel { width: 100%; overflow-x: auto; }
     #document { transform: scale(0.38); }
 }
-
-@media (max-width: 700px) {
-    #document { transform: scale(0.25); }
-}
+@media (max-width: 700px) { #document { transform: scale(0.25); } }

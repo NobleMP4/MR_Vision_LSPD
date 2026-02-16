@@ -6,7 +6,7 @@
     <title>Résumé de Cérémonie — Mission Row</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -23,27 +23,27 @@
         <form id="ceremony-form" autocomplete="off">
             <div class="form-group">
                 <label for="field-date">Date</label>
-                <input type="text" id="field-date" placeholder="Ex : 12/03/2025">
+                <input type="text" id="field-date" placeholder="Ex : 15 Février 2026">
             </div>
             <div class="form-group">
                 <label for="field-rappels">Rappels de la supervision</label>
-                <textarea id="field-rappels" rows="4" placeholder="Un point par ligne..."></textarea>
+                <textarea id="field-rappels" rows="5" placeholder="Un point par ligne..."></textarea>
             </div>
             <div class="form-group">
                 <label for="field-promotions">Promotions</label>
-                <textarea id="field-promotions" rows="4" placeholder="Un élément par ligne..."></textarea>
+                <textarea id="field-promotions" rows="5" placeholder="Ex :&#10;CORPS D'APPLICATIONS&#10;OFFICIER II : 36 | Bradley Hawkins&#10;&#10;DIVISION&#10;COMMANDING OFFICIER K9 : 45 | Rodrigo Alves"></textarea>
             </div>
             <div class="form-group">
                 <label for="field-convocations">Convocations</label>
-                <textarea id="field-convocations" rows="4" placeholder="Un élément par ligne..."></textarea>
+                <textarea id="field-convocations" rows="5" placeholder="Ex :&#10;SUPERVISION&#10;05 | Gavin Gallagher&#10;&#10;WATCH COMMANDER&#10;51 | Matthew Davis"></textarea>
             </div>
             <div class="form-group">
                 <label for="field-arrivees">Arrivées</label>
-                <textarea id="field-arrivees" rows="3" placeholder="Un élément par ligne..."></textarea>
+                <textarea id="field-arrivees" rows="3" placeholder="Ex : 21 | Marcus Bradford"></textarea>
             </div>
             <div class="form-group">
                 <label for="field-departs">Départs</label>
-                <textarea id="field-departs" rows="3" placeholder="Un élément par ligne..."></textarea>
+                <textarea id="field-departs" rows="3" placeholder="Ex : 89 | Alvaro Pena"></textarea>
             </div>
             <div class="btn-row">
                 <button type="button" id="btn-download" class="btn btn-primary">Télécharger en PNG</button>
@@ -57,28 +57,17 @@
         <div id="document-wrapper">
             <div id="document">
 
-                <!-- Thin navy top bar -->
-                <div class="doc-topbar"></div>
-
-                <!-- Header -->
-                <div class="doc-header">
-                    <p class="doc-dept">Los Santos Police Department</p>
-                    <h1 class="doc-title">Résumé de Cérémonie</h1>
-                    <p class="doc-location">Poste de Mission Row</p>
-                    <p class="doc-date" id="doc-date"></p>
+                <!-- Title box -->
+                <div class="doc-title-box">
+                    <span>Résumé de cérémonie de Mission Row</span>
                 </div>
 
-                <div class="doc-divider"></div>
+                <!-- Date -->
+                <div class="doc-date" id="doc-date"></div>
 
-                <!-- Content -->
-                <div class="doc-content" id="doc-body">
-                    <p class="doc-placeholder">Remplissez le formulaire pour voir la prévisualisation.</p>
-                </div>
-
-                <!-- Footer -->
-                <div class="doc-footer">
-                    <div class="doc-divider-light"></div>
-                    <p>Los Santos Police Department — Mission Row Division — Document interne</p>
+                <!-- Main content area -->
+                <div class="doc-main" id="doc-body">
+                    <p class="doc-placeholder">Remplissez le formulaire...</p>
                 </div>
 
             </div>
