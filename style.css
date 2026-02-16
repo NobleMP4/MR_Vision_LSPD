@@ -179,318 +179,228 @@ body {
 .btn-secondary:hover { background: #3a3a4a; color: #bbb; }
 
 /* ---------- Preview ---------- */
-#preview-panel { flex: 1; display: flex; justify-content: center; overflow-x: auto; }
-#document-wrapper {
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-}
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap');
 
-/* ==============================================
-   THE DOCUMENT — 1920x1080
-   Grey background, floating blue banner,
-   cyan line, bordered content box
-   ============================================== */
-#document {
-    width: 1920px;
-    height: 1080px;
-    transform: scale(0.52);
-    transform-origin: top left;
+.ui-panel {
+    width: 1050px;
+    height: 520px;
+    background: linear-gradient(180deg, #0f2147 0%, #050a16 100%);
     position: relative;
-    overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    /* Grey background */
-    background: #3b3b3b;
-    padding: 28px 40px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
 }
 
-/* ---- Header (floating blue banner bar) ---- */
-.doc-header {
+/* HEADER */
+.lspd-header {
+    height: 55px;
+    display: flex;
+    margin-top: 30px;
+    margin-right: 75px;
+    margin-left: 0;
+    background-color: transparent;
+    position: relative;
+    z-index: 5;
+}
+
+.header-black-part {
+    background-color: #464a55;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 18px 40px;
-    z-index: 6;
-    background: linear-gradient(180deg, #122040 0%, #0e1a34 50%, #0b1528 100%);
-    border-radius: 6px 6px 0 0;
+    flex-grow: 1;
+    padding-left: 10px;
+    clip-path: polygon(0% 0%, 100% 0%, calc(100% - 25px) 100%, 0% 100%);
+    margin-right: -25px;
+    position: relative;
 }
 
-.doc-header-left {
+.logo-overflow {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 75px;
+    width: auto;
+    z-index: 100;
+}
+
+.title-text {
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin-left: 100px;
+}
+
+.summary-box {
+    background: #fff;
+    color: #141d26;
+    padding: 0 50px;
     display: flex;
     align-items: center;
-    gap: 22px;
+    font-weight: 700;
+    font-size: 19px;
+    clip-path: polygon(25px 0%, 100% 0%, calc(100% - 25px) 100%, 0% 100%);
 }
 
-.doc-logo {
-    width: 76px;
-    height: 76px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-
-.doc-header-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 28px;
-    font-weight: 800;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    line-height: 1;
-    white-space: nowrap;
-}
-
-.doc-header-right {
-    display: flex;
-    align-items: center;
-}
-
-.doc-header-datebox {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 6px;
-    padding: 10px 22px;
-    white-space: nowrap;
-}
-
-/* ---- Cyan separator line ---- */
-.doc-header-line {
-    height: 3px;
-    background: #00cfff;
-    z-index: 6;
-    box-shadow: 0 0 10px rgba(0, 207, 255, 0.35);
-}
-
-/* ---- Content area (bordered dark box) ---- */
-.doc-main {
-    flex: 1;
+/* GRILLE */
+.main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
-    gap: 0;
-    z-index: 5;
-    background: #0b1528;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0 0 6px 6px;
-    min-height: 0;
+    flex-grow: 1;
+    padding: 30px 20px 20px 20px;
 }
 
-/* ---- Column containers ---- */
-.doc-column {
+.col {
+    padding: 0 15px;
+    position: relative;
+    color: #fff;
     display: flex;
     flex-direction: column;
-    padding: 18px 24px 12px;
-    overflow: hidden;
-}
-.doc-column:not(:first-child) {
-    border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* ---- Section blocks ---- */
-.doc-section {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 14px;
+.bottom-section {
+    margin-top: 15px;
 }
 
-/* Section header — white underline */
-.doc-section-header {
-    background: none;
-    padding: 0 0 7px 0;
-    text-align: center;
-    margin-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+.v-divider::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5%;
+    height: 90%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.15);
 }
 
-.doc-section-header span {
-    font-family: 'Montserrat', sans-serif;
+h2 {
     font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-}
-
-/* Section content */
-.doc-section-content {
-    font-size: 15px;
-    font-weight: 400;
-    color: #ffffff;
-    line-height: 1.5;
-    padding: 0;
-}
-
-/* Subcategory headers */
-.doc-subcategory {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
-    letter-spacing: 1.2px;
-    margin-top: 10px;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-/* Spacer */
-.doc-spacer { height: 6px; }
-
-/* ---- Entry styles ---- */
-
-/* Promotion entry — ★ name / grade ★★ (2 lines) */
-.doc-entry-promo {
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 4px 0;
-}
-.doc-entry-promo .star-left {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 16px;
-    flex-shrink: 0;
-}
-.doc-entry-promo .promo-text {
-    text-align: center;
-    line-height: 1.3;
-}
-.doc-entry-promo .promo-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: #ffffff;
-    display: block;
-}
-.doc-entry-promo .promo-grade {
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.55);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: block;
-}
-.doc-entry-promo .star-right {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
-    flex-shrink: 0;
+    border-bottom: 2px solid #6db5d8;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
     letter-spacing: 1px;
 }
 
-/* Generic entry line */
-.doc-entry {
-    color: #ffffff;
-    font-size: 14px;
-    line-height: 1.65;
+h3 {
+    font-size: 15px;
+    color: #6db5d8;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    letter-spacing: 1px;
     text-align: center;
 }
 
-/* Arrival entry — green dots left + right */
-.doc-entry-arrival {
-    color: #ffffff;
-    font-size: 14px;
-    line-height: 1.65;
+/* =========================
+   ITEMS — STYLE UNIFIÉ CEREMONY
+   ========================= */
+
+.item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 2px 0;
-}
-.doc-entry-arrival .dot-left {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #27ae60;
-    flex-shrink: 0;
-}
-.doc-entry-arrival .dot-right {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #27ae60;
-    flex-shrink: 0;
-}
-.doc-entry-arrival .entry-text {
-    flex: 1;
-    text-align: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
 }
 
-/* Departure entry — red dots left + right */
-.doc-entry-departure {
-    color: #ffffff;
-    font-size: 14px;
-    line-height: 1.65;
+/* PROMOTIONS / ARRIVÉES / DÉPARTS / CONVOCATIONS */
+.item.status {
+    justify-content: space-between;
+}
+
+/* Bloc central (nom + grade) */
+.names {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+/* NOM */
+.main-n {
+    font-size: 13px;          /* ↓ réduit pour tenir en 1080p */
+    line-height: 1.05;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* GRADE / INFO */
+.sub-n {
+    font-size: 9px;
+    color: #adb5bd;
+    letter-spacing: 0.4px;
+}
+
+/* Lignes simples (arrivées / stripes / convocations) */
+.center-name {
+    flex: 1;
+    text-align: center;
+    font-size: 12.5px;
+    letter-spacing: 0.4px;
+}
+
+
+/* =========================
+   SERVICE STRIPES — même style que départs
+   ========================= */
+
+.stripes {
+    display: none; /* on cache les ///// old school */
+}
+
+
+/* =========================
+   DOTS CEREMONIAL STYLE
+   ========================= */
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.g-full {
+    background: #34c759;
+    box-shadow: 0 0 4px rgba(52,199,89,0.6);
+}
+
+.r-full {
+    background: #ff3b30;
+    box-shadow: 0 0 4px rgba(255,59,48,0.6);
+}
+
+.star { display: none; } /* on retire les étoiles */
+.stars-right { display: none; }
+
+
+/* LISTS (Rappels) */
+.list { list-style: none; padding-left: 15px; margin: 0; }
+.list li { font-size: 11px; color: #cbd5e0; margin-bottom: 8px; position: relative; }
+.list li::before { content: "•"; position: absolute; left: -12px; color: #6db5d8; }
+
+/* CONVOCATIONS */
+.convocation .icon { font-size: 18px; margin-right: 10px; opacity: 0.8; }
+
+
+
+.stripe-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 2px 0;
-}
-.doc-entry-departure .dot-left {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    border: 2px solid #c0392b;
-    background: transparent;
-    flex-shrink: 0;
-}
-.doc-entry-departure .dot-right {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #c0392b;
-    flex-shrink: 0;
-}
-.doc-entry-departure .entry-text {
-    flex: 1;
-    text-align: center;
+    justify-content: space-between; /* space-between peut casser html2canvas */
+    gap: 6px;
+    margin-bottom: 6px;
+    font-size: 12.5px;
 }
 
-/* Rappel line (bullet point) */
-.doc-rappel {
-    color: #ffffff;
-    font-size: 14px;
-    line-height: 1.75;
-    padding-left: 18px;
-    position: relative;
-}
-.doc-rappel::before {
-    content: '\2022';
-    position: absolute;
-    left: 4px;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 14px;
+.stripe-name {
+    font-weight: normal;
 }
 
-/* Convocation entry */
-.doc-entry-conv {
-    color: #ffffff;
-    font-size: 14px;
-    line-height: 1.65;
-    text-align: center;
+.stripe-slashes {
+    font-weight: bold;
+    color: #fff; /* s'assurer que html2canvas prend bien la couleur */
 }
 
-/* Badge icon (shield emoji for col3) */
-.doc-badge-icon {
-    text-align: center;
-    font-size: 28px;
-    padding: 8px 0;
-    opacity: 0.4;
-}
 
-/* ---- Placeholder ---- */
-.doc-placeholder {
-    grid-column: 1 / -1;
-    color: rgba(255,255,255,0.10);
-    font-style: italic;
-    text-align: center;
-    font-size: 18px;
-    padding: 280px 0;
-}
+
+
 
 /* ==============================================
    RESPONSIVE

@@ -11,11 +11,6 @@
 </head>
 <body>
 
-<header class="page-header">
-    <h1>Générateur de Compte Rendu</h1>
-    <p class="subtitle">Poste de Mission Row — LSPD</p>
-</header>
-
 <main class="layout">
 
     <!-- ========== FORM ========== -->
@@ -108,30 +103,62 @@
     </div>
 
     <!-- ========== LIVE PREVIEW ========== -->
-    <div id="preview-panel">
-        <div id="document-wrapper">
-            <div id="document">
+    <div class="screen-container">
+        <div class="ui-panel" id="document">
 
-                <!-- Header -->
-                <div class="doc-header">
-                    <div class="doc-header-left">
-                        <img class="doc-logo" src="logo.png" alt="Logo">
-                        <div class="doc-header-title">LOS SANTOS POLICE DEPARTMENT</div>
-                    </div>
-                    <div class="doc-header-right">
-                        <div class="doc-header-datebox">CEREMONY SUMMARY // <span id="doc-date"></span></div>
+            <header class="lspd-header">
+                <img src="LSPD.webp" alt="LSPD Logo" class="logo-overflow">
+                <div class="header-black-part">
+                    <div class="logo-group">
+                        <span class="title-text">RÉSUMER DE CÉRÉMONIE DE MISSION ROW</span>
                     </div>
                 </div>
-                <div class="doc-header-line"></div>
+                <div class="summary-box" id="summary-date">
+                </div>
+            </header>
 
-                <!-- Body — 3 columns -->
-                <div class="doc-main" id="doc-body">
-                    <p class="doc-placeholder">Remplissez le formulaire...</p>
+            <div class="main-grid">
+
+                <div class="col">
+                    <section>
+                        <h2>PROMOTIONS</h2>
+                        <div id="promotions-container"></div>
+                    </section>
+
+                    <section class="bottom-section">
+                        <h2>SERVICE STRIPES</h2>
+                        <div class="stripes-container" id="stripes-container"></div>
+                    </section>
+                </div>
+
+                <div class="col v-divider">
+                    <section>
+                        <h2>ARRIVÉES</h2>
+                        <div id="arrivals-container"></div>
+                    </section>
+
+                    <section class="bottom-section">
+                        <h2>DÉPARTS</h2>
+                        <div id="departures-container"></div>
+                    </section>
+                </div>
+
+                <div class="col v-divider">
+                    <section>
+                        <h2>RAPPELS DE LA SEMAINE</h2>
+                        <ul class="list" id="rappels-container"></ul>
+                    </section>
+
+                    <section class="bottom-section">
+                        <h2>CONVOCATION</h2>
+                        <div id="convocations-container"></div>
+                    </section>
                 </div>
 
             </div>
         </div>
     </div>
+
 
 </main>
 
