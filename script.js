@@ -19,7 +19,7 @@
     ];
 
     var DIVISIONS = [
-        'Detective Bureau', 'Traffic Division', 'SWAT', 'K-9',
+        'Detective Bureau', 'Traffic Division', 'Métro','SWAT', 'K-9',
         'Police Academy', 'Administrative Service Bureau',
         'Crisis Negociation Team', 'Media Relation Division',
         'Air Support Division'
@@ -31,9 +31,23 @@
         '7 Service Stripes'
     ];
 
+    // ---- Division → Grades mapping ----
+    var DIVISION_GRADES_MAP = {
+        'Detective Bureau': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier'],
+        'Traffic Division': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier'],
+        'Métro': ['CS In Charge'],
+        'SWAT': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier'],
+        'K-9': ['CS In Charge', 'Assistant Commanding Officier', 'Assistant Commanding Officier'],
+        'Police Academy': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier', 'Instructeur Confirmer', 'Instructeur'],
+        'Administrative Service Bureau': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier'],
+        'Crisis Negociation Team': ['CS In Charge', 'CS In Charge', 'Assistant Commanding Officier'],
+        'Media Relation Division': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier'],
+        'Air Support Division': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier']
+    };
+
     // ---- DOM refs ----
-    var fieldDate    = document.getElementById('field-date');
-    var fieldRappels = document.getElementById('field-rappels');
+    var fieldDate     = document.getElementById('field-date');
+    var fieldRappels  = document.getElementById('field-rappels');
     var fieldArrivees = document.getElementById('field-arrivees');
     var fieldDeparts  = document.getElementById('field-departs');
 
@@ -114,17 +128,47 @@
         row.appendChild(makeInput('field-name', 'Nom Pr\u00e9nom', data && data.name));
         row.appendChild(makeRemoveBtn(row));
         listPromoCorps.appendChild(row);
+        onInput();
     }
 
     function addPromoDivRow(data) {
         var row = document.createElement('div');
         row.className = 'entry-row';
-        row.appendChild(makeSelect(GRADES_DIVISION, 'field-grade', 'Grade...', data && data.grade));
-        row.appendChild(makeSelect(DIVISIONS, 'field-division', 'Division...', data && data.division));
+
+        // Division select
+        var selDivision = makeSelect(DIVISIONS, 'field-division', 'Division...', data && data.division);
+        row.appendChild(selDivision);
+
+        // Grade select (initial)
+        var initialGrades = data && data.division ? DIVISION_GRADES_MAP[data.division] || [] : [];
+        var selGrade = makeSelect(initialGrades, 'field-grade', 'Grade...', data && data.grade);
+        row.appendChild(selGrade);
+
+        // Inputs matricule et nom
         row.appendChild(makeInput('field-matricule', 'N\u00b0', data && data.matricule));
         row.appendChild(makeInput('field-name', 'Nom Pr\u00e9nom', data && data.name));
+
         row.appendChild(makeRemoveBtn(row));
         listPromoDiv.appendChild(row);
+
+        // Met à jour grades si division change
+        selDivision.addEventListener('change', function () {
+            var currentGrade = selGrade.value;
+            selGrade.innerHTML = '';
+            var gradesForDiv = DIVISION_GRADES_MAP[selDivision.value] || [];
+            var ph = document.createElement('option');
+            ph.value = '';
+            ph.textContent = 'Grade...';
+            ph.disabled = true;
+            ph.selected = !currentGrade;
+            selGrade.appendChild(ph);
+            gradesForDiv.forEach(function (g) {
+                selGrade.appendChild(makeOption(g, currentGrade));
+            });
+            onInput();
+        });
+
+        onInput();
     }
 
     function addConvRow(list, data) {
@@ -134,6 +178,7 @@
         row.appendChild(makeInput('field-name', 'Nom Pr\u00e9nom', data && data.name));
         row.appendChild(makeRemoveBtn(row));
         list.appendChild(row);
+        onInput();
     }
 
     function addStripeRow(data) {
@@ -144,130 +189,105 @@
         row.appendChild(makeInput('field-name', 'Nom Pr\u00e9nom', data && data.name));
         row.appendChild(makeRemoveBtn(row));
         listStripes.appendChild(row);
+        onInput();
     }
 
     // ---- + Button listeners ----
-    document.getElementById('btn-add-promo-corps').addEventListener('click', function () { addPromoCorpsRow(); onInput(); });
-    document.getElementById('btn-add-promo-div').addEventListener('click', function () { addPromoDivRow(); onInput(); });
-    document.getElementById('btn-add-stripes').addEventListener('click', function () { addStripeRow(); onInput(); });
-    document.getElementById('btn-add-conv-sup').addEventListener('click', function () { addConvRow(listConvSup); onInput(); });
-    document.getElementById('btn-add-conv-wc').addEventListener('click', function () { addConvRow(listConvWC); onInput(); });
-    document.getElementById('btn-add-conv-cs').addEventListener('click', function () { addConvRow(listConvCS); onInput(); });
+    document.getElementById('btn-add-promo-corps').addEventListener('click', function () { addPromoCorpsRow(); });
+    document.getElementById('btn-add-promo-div').addEventListener('click', function () { addPromoDivRow(); });
+    document.getElementById('btn-add-stripes').addEventListener('click', function () { addStripeRow(); });
+    document.getElementById('btn-add-conv-sup').addEventListener('click', function () { addConvRow(listConvSup); });
+    document.getElementById('btn-add-conv-wc').addEventListener('click', function () { addConvRow(listConvWC); });
+    document.getElementById('btn-add-conv-cs').addEventListener('click', function () { addConvRow(listConvCS); });
 
     // ---- Read entries from DOM ----
     function readPromoCorps() {
-        var rows = listPromoCorps.querySelectorAll('.entry-row');
-        var entries = [];
-        rows.forEach(function(row){
-            var grade = row.querySelector('.field-grade').value;
-            var matricule = row.querySelector('.field-matricule').value.trim();
-            var name = row.querySelector('.field-name').value.trim();
-            if (grade || matricule || name) entries.push({ grade, matricule, name });
-        });
-        return entries;
+        return Array.from(listPromoCorps.querySelectorAll('.entry-row')).map(row => {
+            return {
+                grade: row.querySelector('.field-grade').value,
+                matricule: row.querySelector('.field-matricule').value.trim(),
+                name: row.querySelector('.field-name').value.trim()
+            };
+        }).filter(e => e.grade || e.matricule || e.name);
     }
 
     function readPromoDiv() {
-        var rows = listPromoDiv.querySelectorAll('.entry-row');
-        var entries = [];
-        rows.forEach(function(row){
+        return Array.from(listPromoDiv.querySelectorAll('.entry-row')).map(row => {
             var selects = row.querySelectorAll('select');
-            var grade = selects[0].value;
-            var division = selects[1].value;
-            var matricule = row.querySelector('.field-matricule').value.trim();
-            var name = row.querySelector('.field-name').value.trim();
-            if (grade || division || matricule || name) entries.push({ grade, division, matricule, name });
-        });
-        return entries;
+            return {
+                division: selects[0].value,
+                grade: selects[1].value,
+                matricule: row.querySelector('.field-matricule').value.trim(),
+                name: row.querySelector('.field-name').value.trim()
+            };
+        }).filter(e => e.division || e.grade || e.matricule || e.name);
     }
 
     function readConvEntries(list) {
-        var rows = list.querySelectorAll('.entry-row');
-        var entries = [];
-        rows.forEach(function(row){
-            var matricule = row.querySelector('.field-matricule').value.trim();
-            var name = row.querySelector('.field-name').value.trim();
-            if (matricule || name) entries.push({ matricule, name });
-        });
-        return entries;
+        return Array.from(list.querySelectorAll('.entry-row')).map(row => {
+            return {
+                matricule: row.querySelector('.field-matricule').value.trim(),
+                name: row.querySelector('.field-name').value.trim()
+            };
+        }).filter(e => e.matricule || e.name);
     }
 
     function readStripes() {
-        var rows = listStripes.querySelectorAll('.entry-row');
-        var entries = [];
-        rows.forEach(function(row){
-            var stripe = row.querySelector('.field-stripes').value;
-            var matricule = row.querySelector('.field-matricule').value.trim();
-            var name = row.querySelector('.field-name').value.trim();
-            if (stripe || matricule || name) entries.push({ stripe, matricule, name });
-        });
-        return entries;
+        return Array.from(listStripes.querySelectorAll('.entry-row')).map(row => {
+            return {
+                stripe: row.querySelector('.field-stripes').value,
+                matricule: row.querySelector('.field-matricule').value.trim(),
+                name: row.querySelector('.field-name').value.trim()
+            };
+        }).filter(e => e.stripe || e.matricule || e.name);
     }
 
     // ---- Render ----
     function render() {
-
-        /* =========================
-           DATE
-        ========================= */
+        // DATE
         document.getElementById("summary-date").textContent = fieldDate.value.trim() || "N/A";
 
-
-        /* =========================
-   PROMOTIONS
-========================= */
+        // PROMOTIONS
         var promoContainer = document.getElementById("promotions-container");
         promoContainer.innerHTML = "";
-
         var corpsList = readPromoCorps();
         var divList   = readPromoDiv();
 
-// Vérifie si tout est vide
         if (corpsList.length === 0 && divList.length === 0) {
             promoContainer.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
         } else {
-
             if (corpsList.length > 0) {
                 promoContainer.innerHTML += `<h3>CORPS D'APPLICATIONS</h3>`;
                 corpsList.forEach(function(p){
                     promoContainer.innerHTML += `
-                <div class="item status">
-                    <div class="names">
-                        <span class="main-n">${escapeHTML(p.matricule)} | ${escapeHTML(p.name)}</span>
-                        <span class="sub-n">${escapeHTML(p.grade)}</span>
-                    </div>
-                </div>
-            `;
+                    <div class="item status">
+                        <div class="names">
+                            <span class="main-n">${escapeHTML(p.matricule)} | ${escapeHTML(p.name)}</span>
+                            <span class="sub-n">${escapeHTML(p.grade)}</span>
+                        </div>
+                    </div>`;
                 });
             }
-
             if (divList.length > 0) {
                 promoContainer.innerHTML += `<h3>DIVISION</h3>`;
                 divList.forEach(function(p){
                     promoContainer.innerHTML += `
-                <div class="item status">
-                    <div class="names">
-                        <span class="main-n">${escapeHTML(p.matricule)} | ${escapeHTML(p.name)}</span>
-                        <span class="sub-n">${escapeHTML(p.grade)} — ${escapeHTML(p.division)}</span>
-                    </div>
-                </div>
-            `;
+                    <div class="item status">
+                        <div class="names">
+                            <span class="main-n">${escapeHTML(p.matricule)} | ${escapeHTML(p.name)}</span>
+                            <span class="sub-n">${escapeHTML(p.division)} — ${escapeHTML(p.grade)}</span>
+                        </div>
+                    </div>`;
                 });
             }
-
         }
 
-
-        /* =========================
-   SERVICE STRIPES
-========================= */
+        // SERVICE STRIPES
         var stripesContainer = document.getElementById("stripes-container");
         stripesContainer.innerHTML = "";
-
         var stripesList = readStripes();
-
         if (stripesList.length === 0) {
-            stripesContainer.innerHTML = `<div class="center-name">N/A</div>`;
+            stripesContainer.innerHTML += `<div class="center-name">N/A</div>`;
         } else {
             stripesList.forEach(function (s) {
                 var count = 0;
@@ -277,92 +297,72 @@
                 }
                 var slashes = '';
                 for (var i = 0; i < count; i++) slashes += '<strong>/</strong>';
-
                 stripesContainer.innerHTML += `
-        <div class="item status stripe-item">
-            <span class="stripe-name">${escapeHTML(s.matricule)} | ${escapeHTML(s.name)}</span>
-            <span class="stripe-slashes">${slashes}</span>
-        </div>
-    `;
+                    <div class="item status stripe-item">
+                        <span class="stripe-name">${escapeHTML(s.matricule)} | ${escapeHTML(s.name)}</span>
+                        <span class="stripe-slashes">${slashes}</span>
+                    </div>`;
             });
         }
 
-        /* =========================
-   ARRIVÉES
-========================= */
+        // ARRIVÉES
         var arrivals = document.getElementById("arrivals-container");
         arrivals.innerHTML = "";
         var arriveesList = fieldArrivees.value.split("\n").filter(name => name.trim() !== "");
-        if (arriveesList.length > 0) {
-            arriveesList.forEach(function (name) {
+        if (arriveesList.length === 0) {
+            arrivals.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
+        } else {
+            arriveesList.forEach(function(name){
                 arrivals.innerHTML += `<div class="item status"><span class="center-name">${escapeHTML(name)}</span></div>`;
             });
-        } else {
-            arrivals.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
         }
 
-        /* =========================
-           DÉPARTS
-        ========================= */
+        // DÉPARTS
         var departures = document.getElementById("departures-container");
         departures.innerHTML = "";
         var departsList = fieldDeparts.value.split("\n").filter(name => name.trim() !== "");
-        if (departsList.length > 0) {
-            departsList.forEach(function (name) {
+        if (departsList.length === 0) {
+            departures.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
+        } else {
+            departsList.forEach(function(name){
                 departures.innerHTML += `<div class="item status"><span class="center-name">${escapeHTML(name)}</span></div>`;
             });
-        } else {
-            departures.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
         }
 
-
-        /* =========================
-   RAPPELS
-========================= */
+        // RAPPELS
         var rappelsContainer = document.getElementById("rappels-container");
         rappelsContainer.innerHTML = "";
-
         var rappelsList = fieldRappels.value.split("\n").filter(line => line.trim() !== "");
-
         if (rappelsList.length === 0) {
-            // Affiche N/A sans puce
             rappelsContainer.innerHTML = `<div class="center-name">N/A</div>`;
         } else {
-            rappelsList.forEach(function (line) {
+            rappelsList.forEach(function(line){
                 rappelsContainer.innerHTML += `<li>${escapeHTML(line)}</li>`;
             });
         }
 
-
-        /* =========================
-   CONVOCATIONS
-========================= */
+        // CONVOCATIONS
         var convContainer = document.getElementById("convocations-container");
         convContainer.innerHTML = "";
-
         var convSup = readConvEntries(listConvSup);
         var convWC  = readConvEntries(listConvWC);
         var convCS  = readConvEntries(listConvCS);
 
-// Vérifie si toutes les listes sont vides
         if (convSup.length === 0 && convWC.length === 0 && convCS.length === 0) {
             convContainer.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
         } else {
-
             if (convSup.length > 0) {
                 convContainer.innerHTML += `<h3>SUPERVISION</h3>`;
                 convSup.forEach(function(c){
                     convContainer.innerHTML += `<div class="item status"><span class="center-name">${escapeHTML(c.matricule)} | ${escapeHTML(c.name)}</span></div>`;
                 });
             }
-
             if (convWC.length > 0) {
                 convContainer.innerHTML += `<h3>WATCH COMMANDER</h3>`;
                 convWC.forEach(function(c){
                     convContainer.innerHTML += `<div class="item status"><span class="center-name">${escapeHTML(c.matricule)} | ${escapeHTML(c.name)}</span></div>`;
                 });
             }
-
             if (convCS.length > 0) {
                 convContainer.innerHTML += `<h3>COMMAND STAFF</h3>`;
                 convCS.forEach(function(c){
@@ -370,7 +370,6 @@
                 });
             }
         }
-
     }
 
     // ---- Storage ----
@@ -439,15 +438,13 @@
         btnDownload.textContent = 'Génération...';
         btnDownload.disabled = true;
 
-        // Calculer la taille réelle du div
         var rect = doc.getBoundingClientRect();
-
         html2canvas(doc, {
             width: rect.width,
             height: rect.height,
-            scale: 2,           // augmente la résolution pour un PNG net
+            scale: 2,
             useCORS: true,
-            backgroundColor: '#111' // ou null si tu veux transparent
+            backgroundColor: '#111'
         })
             .then(function (canvas) {
                 var link = document.createElement('a');
@@ -465,7 +462,6 @@
                 btnDownload.disabled = false;
             });
     });
-
 
     // ---- Init ----
     load();
