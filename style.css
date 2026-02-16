@@ -111,18 +111,18 @@ body {
 /* ---- Title box (silver rounded box) ---- */
 .doc-title-box {
     position: absolute;
-    top: 38px;
+    top: 22px;
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(135deg, #7a9bb5, #5a7d95);
     border-radius: 10px;
-    padding: 13px 48px;
+    padding: 14px 54px;
     z-index: 5;
 }
 
 .doc-title-box span {
     font-family: 'Playfair Display', serif;
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 700;
     color: #0a0f1a;
     white-space: nowrap;
@@ -132,12 +132,12 @@ body {
 /* ---- Date ---- */
 .doc-date {
     position: absolute;
-    top: 108px;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 21px;
+    font-size: 26px;
     color: #7a9bb5;
     z-index: 5;
     white-space: nowrap;
@@ -146,14 +146,14 @@ body {
 /* ---- Content grid ---- */
 .doc-main {
     position: absolute;
-    top: 165px;
-    left: 55px;
-    right: 55px;
-    bottom: 25px;
+    top: 145px;
+    left: 30px;
+    right: 30px;
+    bottom: 15px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr auto auto;
-    gap: 16px 28px;
+    gap: 14px 22px;
     align-content: start;
     z-index: 5;
 }
@@ -168,35 +168,35 @@ body {
 .doc-section-header {
     background: linear-gradient(135deg, #7a9bb5, #5a7d95);
     border-radius: 8px;
-    padding: 7px 20px;
+    padding: 9px 24px;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .doc-section-header span {
     font-family: 'Playfair Display', serif;
-    font-size: 17px;
+    font-size: 22px;
     font-weight: 700;
     color: #0a0f1a;
 }
 
 /* Content text */
 .doc-section-content {
-    font-size: 14.5px;
+    font-size: 18px;
     font-weight: 400;
     color: #ffffff;
-    line-height: 1.75;
-    padding: 0 4px;
+    line-height: 1.7;
+    padding: 0 8px;
 }
 
 /* Bold silver subcategory headers (ALL CAPS lines) */
 .doc-subcategory {
     font-weight: 800;
     color: #7a9bb5;
-    font-size: 13.5px;
+    font-size: 17px;
     letter-spacing: 0.8px;
-    margin-top: 8px;
-    margin-bottom: 2px;
+    margin-top: 10px;
+    margin-bottom: 3px;
 }
 
 /* Spacer between groups */
@@ -205,16 +205,16 @@ body {
 /* Entry line */
 .doc-entry {
     color: #ffffff;
-    font-size: 14.5px;
-    line-height: 1.75;
+    font-size: 18px;
+    line-height: 1.7;
 }
 
 /* Rappel line (with dash) */
 .doc-rappel {
     color: #ffffff;
-    font-size: 14.5px;
-    line-height: 1.85;
-    padding-left: 4px;
+    font-size: 18px;
+    line-height: 1.8;
+    padding-left: 6px;
 }
 
 /* Grid placement — 3 column layout like Vespucci */
