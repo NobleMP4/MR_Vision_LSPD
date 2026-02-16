@@ -221,6 +221,26 @@
 
     // ---- Rendering ----
 
+    // Grade to star count mapping for promotions
+    function gradeStars(grade) {
+        var g = (grade || '').toLowerCase();
+        if (g.indexOf('officier i') === 0 && g.indexOf('ii') === -1 && g.indexOf('iii') === -1) return 1;
+        if (g.indexOf('officier ii') === 0 && g.indexOf('iii') === -1) return 2;
+        if (g.indexOf('officier iii') === 0) return 3;
+        if (g.indexOf('senior lead') === 0) return 4;
+        if (g.indexOf('sergeant i') === 0 && g.indexOf('ii') === -1) return 5;
+        if (g.indexOf('sergeant ii') === 0) return 6;
+        if (g.indexOf('lieutenant') === 0) return 7;
+        if (g.indexOf('captain') === 0) return 8;
+        return 1;
+    }
+
+    function makeStars(n) {
+        var s = '';
+        for (var i = 0; i < n; i++) s += '\u2605';
+        return s;
+    }
+
     function renderStripes() {
         var stripes = readStripes();
         if (stripes.length === 0) return '';
@@ -246,7 +266,8 @@
                 html += '<div class="doc-spacer"></div>';
                 continue;
             }
-            var display = t.charAt(0) === '-' ? t : '- ' + t;
+            // Strip leading dash if present
+            var display = t.charAt(0) === '-' ? t.substring(1).trim() : t;
             html += '<div class="doc-rappel">' + escapeHTML(display) + '</div>';
         }
         return html;
@@ -261,11 +282,18 @@
             html += '<div class="doc-subcategory">Corps d\'applications</div>';
             for (var i = 0; i < corps.length; i++) {
                 var e = corps[i];
-                var line = '';
-                if (e.grade) line += e.grade.toUpperCase();
-                if (e.matricule) line += ' : ' + e.matricule;
-                if (e.name) line += ' | ' + e.name;
-                if (line) html += '<div class="doc-entry">' + escapeHTML(line) + '</div>';
+                var text = '';
+                if (e.name) text += e.name;
+                if (e.grade) text += ' \u2014 ' + e.grade;
+                if (e.matricule) text += ' (' + e.matricule + ')';
+                var stars = gradeStars(e.grade);
+                if (text) {
+                    html += '<div class="doc-entry-promo">' +
+                        '<span class="star-left">\u2605</span>' +
+                        '<span class="promo-text">' + escapeHTML(text) + '</span>' +
+                        '<span class="star-right">' + makeStars(stars) + '</span>' +
+                        '</div>';
+                }
             }
         }
 
@@ -274,12 +302,18 @@
             html += '<div class="doc-subcategory">Division</div>';
             for (var j = 0; j < div.length; j++) {
                 var d = div[j];
-                var dline = '';
-                if (d.grade) dline += d.grade.toUpperCase();
-                if (d.division) dline += ' ' + d.division.toUpperCase();
-                if (d.matricule) dline += ' : ' + d.matricule;
-                if (d.name) dline += ' | ' + d.name;
-                if (dline) html += '<div class="doc-entry">' + escapeHTML(dline) + '</div>';
+                var dtext = '';
+                if (d.name) dtext += d.name;
+                if (d.grade) dtext += ' \u2014 ' + d.grade;
+                if (d.division) dtext += ' (' + d.division + ')';
+                if (d.matricule) dtext += ' [' + d.matricule + ']';
+                if (dtext) {
+                    html += '<div class="doc-entry-promo">' +
+                        '<span class="star-left">\u2605</span>' +
+                        '<span class="promo-text">' + escapeHTML(dtext) + '</span>' +
+                        '<span class="star-right">\u2605\u2605</span>' +
+                        '</div>';
+                }
             }
         }
 
@@ -299,7 +333,7 @@
                 var line = '';
                 if (sup[i].matricule) line += sup[i].matricule;
                 if (sup[i].name) line += (line ? ' | ' : '') + sup[i].name;
-                if (line) html += '<div class="doc-entry">' + escapeHTML(line) + '</div>';
+                if (line) html += '<div class="doc-entry-conv">' + escapeHTML(line) + '</div>';
             }
             hasContent = true;
         }
@@ -311,7 +345,7 @@
                 var wline = '';
                 if (wc[j].matricule) wline += wc[j].matricule;
                 if (wc[j].name) wline += (wline ? ' | ' : '') + wc[j].name;
-                if (wline) html += '<div class="doc-entry">' + escapeHTML(wline) + '</div>';
+                if (wline) html += '<div class="doc-entry-conv">' + escapeHTML(wline) + '</div>';
             }
             hasContent = true;
         }
@@ -323,7 +357,7 @@
                 var cline = '';
                 if (cs[k].matricule) cline += cs[k].matricule;
                 if (cs[k].name) cline += (cline ? ' | ' : '') + cs[k].name;
-                if (cline) html += '<div class="doc-entry">' + escapeHTML(cline) + '</div>';
+                if (cline) html += '<div class="doc-entry-conv">' + escapeHTML(cline) + '</div>';
             }
         }
 
@@ -339,7 +373,11 @@
             if (!t) {
                 html += '<div class="doc-spacer"></div>';
             } else {
-                html += '<div class="doc-entry-arrival">' + escapeHTML(t) + '</div>';
+                html += '<div class="doc-entry-arrival">' +
+                    '<span class="dot-left"></span>' +
+                    '<span class="entry-text">' + escapeHTML(t) + '</span>' +
+                    '<span class="dot-right"></span>' +
+                    '</div>';
             }
         }
         return html;
@@ -354,7 +392,11 @@
             if (!t) {
                 html += '<div class="doc-spacer"></div>';
             } else {
-                html += '<div class="doc-entry-departure">' + escapeHTML(t) + '</div>';
+                html += '<div class="doc-entry-departure">' +
+                    '<span class="dot-left"></span>' +
+                    '<span class="entry-text">' + escapeHTML(t) + '</span>' +
+                    '<span class="dot-right"></span>' +
+                    '</div>';
             }
         }
         return html;
@@ -423,20 +465,31 @@
         // Service Stripes — conditional
         var stripesHTML = renderStripes();
 
-        // Build 3 columns
+        // Column 1: Promotions + Service Stripes
         var col1 = '';
-        col1 += makeSection('Rappel de la semaine', parseRappels(fieldRappels.value));
+        col1 += makeSection('Promotions', renderPromotions());
         if (stripesHTML) {
             col1 += makeSection('Service Stripes', stripesHTML);
         }
 
+        // Column 2: Arrivées / Départs (combined)
         var col2 = '';
-        col2 += makeSection('Promotions', renderPromotions());
+        var arrDepHTML = '';
+        var arrHTML = parseArrivals(fieldArrivees.value);
+        var depHTML = parseDepartures(fieldDeparts.value);
+        if (arrHTML) {
+            arrDepHTML += '<div class="doc-subcategory">Arriv\u00e9es</div>' + arrHTML;
+        }
+        if (depHTML) {
+            if (arrHTML) arrDepHTML += '<div class="doc-spacer"></div>';
+            arrDepHTML += '<div class="doc-subcategory">D\u00e9parts</div>' + depHTML;
+        }
+        col2 += makeSection('Arriv\u00e9es / D\u00e9parts', arrDepHTML);
 
+        // Column 3: Rappels + Convocations
         var col3 = '';
+        col3 += makeSection('Rappels', parseRappels(fieldRappels.value));
         col3 += makeSection('Convocations', renderConvocations());
-        col3 += makeSection('Arriv\u00e9es', parseArrivals(fieldArrivees.value));
-        col3 += makeSection('D\u00e9parts', parseDepartures(fieldDeparts.value));
 
         var html = '';
         html += '<div class="doc-column">' + col1 + '</div>';
