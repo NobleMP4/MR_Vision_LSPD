@@ -288,24 +288,33 @@
         }
 
         /* =========================
-           ARRIVÉES
-        ========================= */
+   ARRIVÉES
+========================= */
         var arrivals = document.getElementById("arrivals-container");
         arrivals.innerHTML = "";
-        fieldArrivees.value.split("\n").forEach(function (name) {
-            if (!name.trim()) return;
-            arrivals.innerHTML += `<div class="item status"><span class="center-name">${escapeHTML(name)}</span></div>`;
-        });
+        var arriveesList = fieldArrivees.value.split("\n").filter(name => name.trim() !== "");
+        if (arriveesList.length > 0) {
+            arriveesList.forEach(function (name) {
+                arrivals.innerHTML += `<div class="item status"><span class="center-name">${escapeHTML(name)}</span></div>`;
+            });
+        } else {
+            arrivals.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
+        }
 
         /* =========================
            DÉPARTS
         ========================= */
         var departures = document.getElementById("departures-container");
         departures.innerHTML = "";
-        fieldDeparts.value.split("\n").forEach(function (name) {
-            if (!name.trim()) return;
-            departures.innerHTML += `<div class="item status"><span class="center-name">${escapeHTML(name)}</span></div>`;
-        });
+        var departsList = fieldDeparts.value.split("\n").filter(name => name.trim() !== "");
+        if (departsList.length > 0) {
+            departsList.forEach(function (name) {
+                departures.innerHTML += `<div class="item status"><span class="center-name">${escapeHTML(name)}</span></div>`;
+            });
+        } else {
+            departures.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
+        }
+
 
         /* =========================
    RAPPELS
