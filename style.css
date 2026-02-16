@@ -199,10 +199,10 @@ body {
     position: relative;
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
-    background: #0b1120;
+    background: #060a12;
 }
 
-/* ---- Header ---- */
+/* ---- Header (blue banner bar) ---- */
 .doc-header {
     position: relative;
     display: flex;
@@ -210,6 +210,7 @@ body {
     justify-content: space-between;
     padding: 20px 50px 18px;
     z-index: 6;
+    background: linear-gradient(180deg, #0e1a2e 0%, #0c1626 100%);
 }
 
 .doc-header-left {
@@ -253,11 +254,10 @@ body {
     white-space: nowrap;
 }
 
-/* ---- Cyan separator line ---- */
+/* ---- Cyan separator line (full width) ---- */
 .doc-header-line {
     height: 3px;
-    background: linear-gradient(90deg, transparent 1%, #00d4ff 10%, #00d4ff 90%, transparent 99%);
-    margin: 0 50px;
+    background: #00d4ff;
     z-index: 6;
 }
 
