@@ -6,7 +6,7 @@
     <title>Résumé de Cérémonie — Mission Row</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -18,82 +18,67 @@
 
 <main class="layout">
 
-    <!-- ========== FORM (left) ========== -->
+    <!-- ========== FORM ========== -->
     <div id="editor-panel">
         <form id="ceremony-form" autocomplete="off">
             <div class="form-group">
-                <label for="field-date">DATE</label>
+                <label for="field-date">Date</label>
                 <input type="text" id="field-date" placeholder="Ex : 12/03/2025">
             </div>
-
             <div class="form-group">
-                <label for="field-rappels">RAPPELS DE LA SUPERVISION</label>
+                <label for="field-rappels">Rappels de la supervision</label>
                 <textarea id="field-rappels" rows="4" placeholder="Un point par ligne..."></textarea>
             </div>
-
             <div class="form-group">
-                <label for="field-promotions">PROMOTIONS</label>
+                <label for="field-promotions">Promotions</label>
                 <textarea id="field-promotions" rows="4" placeholder="Un élément par ligne..."></textarea>
             </div>
-
             <div class="form-group">
-                <label for="field-convocations">CONVOCATIONS</label>
+                <label for="field-convocations">Convocations</label>
                 <textarea id="field-convocations" rows="4" placeholder="Un élément par ligne..."></textarea>
             </div>
-
             <div class="form-group">
-                <label for="field-arrivees">ARRIVÉES</label>
+                <label for="field-arrivees">Arrivées</label>
                 <textarea id="field-arrivees" rows="3" placeholder="Un élément par ligne..."></textarea>
             </div>
-
             <div class="form-group">
-                <label for="field-departs">DÉPARTS</label>
+                <label for="field-departs">Départs</label>
                 <textarea id="field-departs" rows="3" placeholder="Un élément par ligne..."></textarea>
             </div>
-
             <div class="btn-row">
-                <button type="button" id="btn-download" class="btn btn-primary">TÉLÉCHARGER EN PNG</button>
-                <button type="button" id="btn-reset" class="btn btn-secondary">RÉINITIALISER</button>
+                <button type="button" id="btn-download" class="btn btn-primary">Télécharger en PNG</button>
+                <button type="button" id="btn-reset" class="btn btn-secondary">Réinitialiser</button>
             </div>
         </form>
     </div>
 
-    <!-- ========== LIVE PREVIEW (right) ========== -->
+    <!-- ========== LIVE PREVIEW ========== -->
     <div id="preview-panel">
         <div id="document-wrapper">
             <div id="document">
 
-                <!-- Background decorations -->
-                <div class="deco-corner deco-top-left"></div>
-                <div class="deco-corner deco-top-right"></div>
-                <div class="deco-corner deco-bottom-left"></div>
-                <div class="deco-corner deco-bottom-right"></div>
-                <div class="deco-line-left"></div>
-                <div class="deco-line-right"></div>
+                <!-- Thin navy top bar -->
+                <div class="doc-topbar"></div>
 
-                <!-- Top banner -->
-                <div class="doc-banner">
-                    <div class="banner-accent"></div>
-                    <div class="banner-content">
-                        <div class="banner-badge">LSPD</div>
-                        <div class="banner-text">
-                            <h1 class="doc-title">RÉSUMÉ DE CÉRÉMONIE</h1>
-                            <p class="doc-subtitle">POSTE DE MISSION ROW</p>
-                        </div>
-                        <div class="banner-date" id="doc-date"></div>
-                    </div>
-                    <div class="banner-accent"></div>
+                <!-- Header -->
+                <div class="doc-header">
+                    <p class="doc-dept">Los Santos Police Department</p>
+                    <h1 class="doc-title">Résumé de Cérémonie</h1>
+                    <p class="doc-location">Poste de Mission Row</p>
+                    <p class="doc-date" id="doc-date"></p>
                 </div>
 
-                <!-- Content grid -->
-                <div class="doc-grid" id="doc-body">
-                    <p class="doc-placeholder">Remplissez le formulaire pour générer le document...</p>
+                <div class="doc-divider"></div>
+
+                <!-- Content -->
+                <div class="doc-content" id="doc-body">
+                    <p class="doc-placeholder">Remplissez le formulaire pour voir la prévisualisation.</p>
                 </div>
 
                 <!-- Footer -->
                 <div class="doc-footer">
-                    <div class="footer-line"></div>
-                    <p>LOS SANTOS POLICE DEPARTMENT — MISSION ROW DIVISION — DOCUMENT INTERNE</p>
+                    <div class="doc-divider-light"></div>
+                    <p>Los Santos Police Department — Mission Row Division — Document interne</p>
                 </div>
 
             </div>
