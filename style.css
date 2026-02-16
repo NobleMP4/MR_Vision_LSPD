@@ -188,7 +188,8 @@ body {
 
 /* ==============================================
    THE DOCUMENT — 1920x1080
-   New style: dark navy, cyan accents, LSPD theme
+   LSPD Mockup style: dark navy, cyan line,
+   white separators, bordered date box
    ============================================== */
 #document {
     width: 1920px;
@@ -198,71 +199,75 @@ body {
     position: relative;
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(160deg, #060d1a 0%, #0a1628 30%, #0e1f3d 50%, #0a1628 70%, #060d1a 100%);
+    background: #0b1120;
 }
 
-/* ---- Header bar ---- */
+/* ---- Header ---- */
 .doc-header {
     position: relative;
     display: flex;
     align-items: center;
-    padding: 24px 40px 16px;
+    justify-content: space-between;
+    padding: 20px 50px 18px;
     z-index: 6;
 }
 
-.doc-logo {
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-    flex-shrink: 0;
-    margin-right: 30px;
+.doc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-.doc-header-text {
-    flex: 1;
-    text-align: center;
-    padding-right: 120px; /* offset for logo balance */
+.doc-logo {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .doc-header-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 44px;
+    font-size: 32px;
     font-weight: 800;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 3px;
-}
-
-.doc-header-subtitle {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 22px;
-    font-weight: 500;
-    color: #8aa8c7;
-    text-transform: uppercase;
     letter-spacing: 2px;
-    margin-top: 4px;
+    line-height: 1.15;
 }
 
-.doc-header-subtitle #doc-date {
+.doc-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.doc-header-datebox {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
     color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    padding: 12px 28px;
+    white-space: nowrap;
 }
 
 /* ---- Cyan separator line ---- */
 .doc-header-line {
-    position: relative;
     height: 3px;
-    background: linear-gradient(90deg, transparent 2%, #00d4ff 15%, #00d4ff 85%, transparent 98%);
-    margin: 0 40px;
+    background: linear-gradient(90deg, transparent 1%, #00d4ff 10%, #00d4ff 90%, transparent 99%);
+    margin: 0 50px;
     z-index: 6;
 }
 
 /* ---- Content grid ---- */
 .doc-main {
     position: absolute;
-    top: 155px;
-    left: 40px;
-    right: 40px;
-    bottom: 24px;
+    top: 148px;
+    left: 50px;
+    right: 50px;
+    bottom: 30px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
@@ -270,130 +275,177 @@ body {
     z-index: 5;
 }
 
-/* ---- Column separators ---- */
+/* ---- Column containers ---- */
 .doc-column {
     display: flex;
     flex-direction: column;
-    padding: 0 24px;
+    padding: 12px 28px 0;
     overflow: hidden;
 }
 .doc-column:not(:first-child) {
-    border-left: 2px solid rgba(0, 212, 255, 0.35);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* ---- Section blocks ---- */
 .doc-section {
     display: flex;
     flex-direction: column;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
-/* Section header — underlined cyan style */
+/* Section header — white underline */
 .doc-section-header {
     background: none;
-    border-radius: 0;
     padding: 0 0 8px 0;
     text-align: center;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #00d4ff;
+    margin-bottom: 12px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .doc-section-header span {
     font-family: 'Montserrat', sans-serif;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
 }
 
-/* Content text */
+/* Section content */
 .doc-section-content {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 400;
     color: #ffffff;
-    line-height: 1.6;
-    padding: 0 4px;
+    line-height: 1.55;
+    padding: 0;
 }
 
-/* Subcategory headers */
+/* Subcategory headers (e.g. "Corps d'applications", "Superviseur") */
 .doc-subcategory {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    color: #00d4ff;
-    font-size: 16px;
-    letter-spacing: 0.8px;
-    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-top: 12px;
     margin-bottom: 4px;
     text-transform: uppercase;
     text-align: center;
 }
 
-/* Spacer between groups */
-.doc-spacer { height: 6px; }
+/* Spacer */
+.doc-spacer { height: 8px; }
 
-/* Entry line */
+/* ---- Entry styles ---- */
+
+/* Promotion entry — star on left, text, stars on right */
+.doc-entry-promo {
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.7;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.doc-entry-promo .star-left {
+    color: #c0c0c0;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.doc-entry-promo .promo-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.doc-entry-promo .star-right {
+    color: #c0c0c0;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* Generic entry line */
 .doc-entry {
     color: #ffffff;
-    font-size: 18px;
-    line-height: 1.55;
+    font-size: 16px;
+    line-height: 1.7;
     text-align: center;
 }
 
-/* Arrival entry — green dot */
+/* Arrival entry — green dots left + right */
 .doc-entry-arrival {
     color: #ffffff;
-    font-size: 18px;
-    line-height: 1.55;
-    text-align: left;
-    padding-left: 20px;
-    position: relative;
+    font-size: 16px;
+    line-height: 1.7;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1px 0;
 }
-.doc-entry-arrival::before {
-    content: '';
-    position: absolute;
-    left: 2px;
-    top: 50%;
-    transform: translateY(-50%);
+.doc-entry-arrival .dot-left,
+.doc-entry-arrival .dot-right {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background: #2ecc71;
+    flex-shrink: 0;
+}
+.doc-entry-arrival .entry-text {
+    flex: 1;
+    text-align: center;
 }
 
-/* Departure entry — red dot */
+/* Departure entry — red dots left + right */
 .doc-entry-departure {
     color: #ffffff;
-    font-size: 18px;
-    line-height: 1.55;
-    text-align: left;
-    padding-left: 20px;
-    position: relative;
+    font-size: 16px;
+    line-height: 1.7;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1px 0;
 }
-.doc-entry-departure::before {
-    content: '';
-    position: absolute;
-    left: 2px;
-    top: 50%;
-    transform: translateY(-50%);
+.doc-entry-departure .dot-left,
+.doc-entry-departure .dot-right {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background: #e74c3c;
+    flex-shrink: 0;
+}
+.doc-entry-departure .entry-text {
+    flex: 1;
+    text-align: center;
 }
 
-/* Rappel line (with dash) */
+/* Rappel line (bullet point) */
 .doc-rappel {
     color: #ffffff;
-    font-size: 18px;
-    line-height: 1.6;
-    padding-left: 6px;
+    font-size: 16px;
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+}
+.doc-rappel::before {
+    content: '\2022';
+    position: absolute;
+    left: 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Convocation entry */
+.doc-entry-conv {
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.7;
+    text-align: center;
 }
 
 /* ---- Placeholder ---- */
 .doc-placeholder {
     grid-column: 1 / -1;
-    color: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.12);
     font-style: italic;
     text-align: center;
     font-size: 18px;
