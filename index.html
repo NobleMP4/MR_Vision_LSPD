@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résumé de Cérémonie — Mission Row</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- html2canvas CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<!-- ==================== FORMULAIRE ==================== -->
+<div id="editor-panel">
+    <header class="editor-header">
+        <h1>Générateur de Compte Rendu</h1>
+        <p class="subtitle">Cérémonie du poste de Mission Row</p>
+    </header>
+
+    <form id="ceremony-form" autocomplete="off">
+        <div class="form-group">
+            <label for="field-date">📅 Date</label>
+            <input type="text" id="field-date" placeholder="Ex : 12/03/2025">
+        </div>
+
+        <div class="form-group">
+            <label for="field-rappels">📌 Rappels de la supervision</label>
+            <textarea id="field-rappels" rows="4" placeholder="Un point par ligne..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="field-promotions">📈 Promotions (agents, divisions)</label>
+            <textarea id="field-promotions" rows="4" placeholder="Un élément par ligne..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="field-convocations">📄 Convocations (supervision, command staff)</label>
+            <textarea id="field-convocations" rows="4" placeholder="Un élément par ligne..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="field-arrivees">👮 Arrivées</label>
+            <textarea id="field-arrivees" rows="3" placeholder="Un élément par ligne..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="field-departs">🚪 Départs</label>
+            <textarea id="field-departs" rows="3" placeholder="Un élément par ligne..."></textarea>
+        </div>
+
+        <div class="btn-row">
+            <button type="button" id="btn-generate" class="btn btn-primary">Générer le document</button>
+            <button type="button" id="btn-reset" class="btn btn-secondary">Réinitialiser</button>
+        </div>
+    </form>
+</div>
+
+<!-- ==================== PREVIEW + EXPORT ==================== -->
+<div id="preview-panel" class="hidden">
+    <div class="preview-toolbar">
+        <button type="button" id="btn-back" class="btn btn-secondary">← Retour au formulaire</button>
+        <button type="button" id="btn-download" class="btn btn-primary">Télécharger en PNG</button>
+    </div>
+
+    <div id="document-wrapper">
+        <div id="document">
+            <div class="doc-header">
+                <img id="doc-logo" src="" alt="" class="doc-logo hidden">
+                <h1 class="doc-title">Résumé de cérémonie du poste de Mission Row</h1>
+                <p class="doc-date" id="doc-date"></p>
+            </div>
+
+            <div id="doc-body">
+                <!-- Sections are injected by script.js -->
+            </div>
+
+            <div class="doc-footer">
+                <p>Los Santos Police Department — Mission Row Division</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

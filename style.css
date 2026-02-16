@@ -1,0 +1,237 @@
+/* ===================================================
+   CEREMONY REPORT GENERATOR — STYLE
+   =================================================== */
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ---------- Editor Panel ---------- */
+#editor-panel {
+    width: 100%;
+    max-width: 700px;
+}
+
+.editor-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.editor-header h1 {
+    font-size: 1.6rem;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.editor-header .subtitle {
+    color: #8a8aaf;
+    margin-top: 0.3rem;
+    font-size: 0.95rem;
+}
+
+/* ---------- Form ---------- */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: #c5c5e0;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #2e2e50;
+    border-radius: 6px;
+    background: #16162b;
+    color: #e0e0e0;
+    font-family: inherit;
+    font-size: 0.92rem;
+    transition: border-color 0.2s;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #5a5af0;
+}
+
+/* ---------- Buttons ---------- */
+.btn-row {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 0.65rem 1.4rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-primary {
+    background: #4a4adf;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #5c5cf0;
+}
+
+.btn-secondary {
+    background: #2e2e50;
+    color: #c5c5e0;
+}
+
+.btn-secondary:hover {
+    background: #3a3a66;
+}
+
+/* ---------- Preview Panel ---------- */
+#preview-panel {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.preview-toolbar {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ---------- Document Wrapper (shadow frame) ---------- */
+#document-wrapper {
+    background: #fff;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* ---------- The Document Itself ---------- */
+#document {
+    width: 794px;           /* ≈ A4 width at 96 DPI */
+    min-height: 1000px;
+    padding: 60px 65px 50px;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: 'Times New Roman', 'Georgia', serif;
+    font-size: 13.5px;
+    line-height: 1.65;
+    position: relative;
+}
+
+/* ---------- Document Header ---------- */
+.doc-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid #1a1a1a;
+}
+
+.doc-logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.doc-title {
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #1a1a1a;
+}
+
+.doc-date {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #444;
+    font-style: italic;
+}
+
+/* ---------- Document Sections ---------- */
+.doc-section {
+    margin-bottom: 22px;
+}
+
+.doc-section-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #999;
+    color: #1a1a1a;
+}
+
+.doc-section-content {
+    white-space: pre-line;
+    font-size: 13.5px;
+    color: #222;
+}
+
+/* ---------- Document Footer ---------- */
+.doc-footer {
+    position: absolute;
+    bottom: 30px;
+    left: 65px;
+    right: 65px;
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 850px) {
+    #document-wrapper {
+        transform: scale(0.75);
+        transform-origin: top center;
+    }
+}
+
+@media (max-width: 600px) {
+    #document-wrapper {
+        transform: scale(0.55);
+        transform-origin: top center;
+    }
+}
