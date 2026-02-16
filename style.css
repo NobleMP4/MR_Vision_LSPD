@@ -1,15 +1,14 @@
 /* ===================================================
    CEREMONY REPORT — MISSION ROW
-   Style matching Vespucci: dark blue bg, silver
-   title boxes, white text, bold silver subcategories
-   1920×1080 landscape
+   Modern style: dark blue bg, grey-silver accents,
+   Montserrat + Poppins fonts, 1920x1080 landscape
    =================================================== */
 
 /* ---------- Reset ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: #111;
     color: #e0e0e0;
     min-height: 100vh;
@@ -18,7 +17,7 @@ body {
 
 /* ---------- UI Header ---------- */
 .page-header { text-align: center; margin-bottom: 1.5rem; }
-.page-header h1 { font-size: 1.3rem; font-weight: 700; color: #b0b8c0; }
+.page-header h1 { font-family: 'Montserrat', sans-serif; font-size: 1.3rem; font-weight: 700; color: #b0b8c0; }
 .page-header .subtitle { color: #888; margin-top: 0.15rem; font-size: 0.82rem; }
 
 /* ---------- Layout ---------- */
@@ -32,7 +31,7 @@ body {
 
 /* ---------- Editor ---------- */
 #editor-panel {
-    flex: 0 0 370px;
+    flex: 0 0 420px;
     position: sticky;
     top: 1.5rem;
     max-height: calc(100vh - 3rem);
@@ -46,7 +45,7 @@ body {
 #editor-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 
 .form-group { margin-bottom: 0.9rem; }
-.form-group label {
+.form-group > label {
     display: block;
     margin-bottom: 0.3rem;
     font-weight: 600;
@@ -54,19 +53,113 @@ body {
     color: #b0b8c0;
 }
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 0.5rem 0.65rem;
     border: 1px solid #2a2a3a;
     border-radius: 5px;
     background: #12121f;
     color: #ddd;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 0.82rem;
     resize: vertical;
 }
+.form-group select { cursor: pointer; }
 .form-group input:focus,
-.form-group textarea:focus { outline: none; border-color: #b0b8c0; }
+.form-group textarea:focus,
+.form-group select:focus { outline: none; border-color: #b0b8c0; }
+
+/* ---------- Group header (label + add button) ---------- */
+.group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+}
+.group-header label {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #b0b8c0;
+}
+
+/* ---------- + Button ---------- */
+.btn-add {
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 50%;
+    background: #b0b8c0;
+    color: #111;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+.btn-add:hover { background: #c8cfd6; }
+
+/* ---------- Dynamic list ---------- */
+.dynamic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Single entry row */
+.entry-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    background: #12121f;
+    border: 1px solid #2a2a3a;
+    border-radius: 5px;
+    padding: 5px 6px;
+}
+.entry-row select,
+.entry-row input {
+    border: 1px solid #2a2a3a;
+    border-radius: 4px;
+    background: #1a1a2a;
+    color: #ddd;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.45rem;
+}
+.entry-row select { cursor: pointer; min-width: 0; }
+.entry-row input { min-width: 0; }
+.entry-row select:focus,
+.entry-row input:focus { outline: none; border-color: #b0b8c0; }
+
+/* Flex proportions inside entry rows */
+.entry-row .field-grade { flex: 1.2; }
+.entry-row .field-division { flex: 1.2; }
+.entry-row .field-matricule { flex: 0 0 50px; text-align: center; }
+.entry-row .field-name { flex: 2; }
+
+/* Delete button */
+.btn-remove {
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 50%;
+    background: #3a2030;
+    color: #e06070;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+.btn-remove:hover { background: #5a2040; }
 
 /* ---------- Buttons ---------- */
 .btn-row { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
@@ -74,7 +167,7 @@ body {
     padding: 0.55rem 1.1rem;
     border: none;
     border-radius: 5px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -93,7 +186,7 @@ body {
 }
 
 /* ==============================================
-   THE DOCUMENT — 1920×1080
+   THE DOCUMENT — 1920x1080
    ============================================== */
 #document {
     width: 1920px;
@@ -102,9 +195,9 @@ body {
     transform-origin: top left;
     position: relative;
     overflow: hidden;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
 
-    /* Dark blue gradient — matching Vespucci */
+    /* Dark blue gradient */
     background: linear-gradient(160deg, #08101e 0%, #0c1a35 25%, #10224a 50%, #0c1a35 75%, #08101e 100%);
 }
 
@@ -121,12 +214,13 @@ body {
 }
 
 .doc-title-box span {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 42px;
-    font-weight: 700;
+    font-weight: 800;
     color: #0a0f1a;
     white-space: nowrap;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 /* ---- Date ---- */
@@ -135,8 +229,9 @@ body {
     top: 100px;
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-style: italic;
+    font-weight: 500;
     font-size: 30px;
     color: #b0b8c0;
     z-index: 5;
@@ -173,10 +268,11 @@ body {
 }
 
 .doc-section-header span {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 26px;
     font-weight: 700;
     color: #0a0f1a;
+    text-transform: uppercase;
 }
 
 /* Content text */
@@ -188,14 +284,16 @@ body {
     padding: 0 10px;
 }
 
-/* Bold silver subcategory headers (ALL CAPS lines) */
+/* Bold silver subcategory headers */
 .doc-subcategory {
-    font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
     color: #b0b8c0;
     font-size: 20px;
     letter-spacing: 0.8px;
     margin-top: 10px;
     margin-bottom: 3px;
+    text-transform: uppercase;
 }
 
 /* Spacer between groups */

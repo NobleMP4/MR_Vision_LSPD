@@ -6,7 +6,7 @@
     <title>Résumé de Cérémonie — Mission Row</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -21,30 +21,76 @@
     <!-- ========== FORM ========== -->
     <div id="editor-panel">
         <form id="ceremony-form" autocomplete="off">
+
+            <!-- Date -->
             <div class="form-group">
                 <label for="field-date">Date</label>
                 <input type="text" id="field-date" placeholder="Ex : 15 Février 2026">
             </div>
+
+            <!-- Rappels -->
             <div class="form-group">
                 <label for="field-rappels">Rappels de la supervision</label>
                 <textarea id="field-rappels" rows="5" placeholder="Un point par ligne..."></textarea>
             </div>
+
+            <!-- Promotions — Corps d'applications -->
             <div class="form-group">
-                <label for="field-promotions">Promotions</label>
-                <textarea id="field-promotions" rows="5" placeholder="Ex :&#10;CORPS D'APPLICATIONS&#10;OFFICIER II : 36 | Bradley Hawkins&#10;&#10;DIVISION&#10;COMMANDING OFFICIER K9 : 45 | Rodrigo Alves"></textarea>
+                <div class="group-header">
+                    <label>Promotions — Corps d'applications</label>
+                    <button type="button" class="btn-add" id="btn-add-promo-corps" title="Ajouter">+</button>
+                </div>
+                <div id="list-promo-corps" class="dynamic-list"></div>
             </div>
+
+            <!-- Promotions — Division -->
             <div class="form-group">
-                <label for="field-convocations">Convocations</label>
-                <textarea id="field-convocations" rows="5" placeholder="Ex :&#10;SUPERVISION&#10;05 | Gavin Gallagher&#10;&#10;WATCH COMMANDER&#10;51 | Matthew Davis"></textarea>
+                <div class="group-header">
+                    <label>Promotions — Division</label>
+                    <button type="button" class="btn-add" id="btn-add-promo-div" title="Ajouter">+</button>
+                </div>
+                <div id="list-promo-div" class="dynamic-list"></div>
             </div>
+
+            <!-- Convocations — Superviseur -->
+            <div class="form-group">
+                <div class="group-header">
+                    <label>Convocations — Superviseur</label>
+                    <button type="button" class="btn-add" id="btn-add-conv-sup" title="Ajouter">+</button>
+                </div>
+                <div id="list-conv-sup" class="dynamic-list"></div>
+            </div>
+
+            <!-- Convocations — Watch Commander -->
+            <div class="form-group">
+                <div class="group-header">
+                    <label>Convocations — Watch Commander</label>
+                    <button type="button" class="btn-add" id="btn-add-conv-wc" title="Ajouter">+</button>
+                </div>
+                <div id="list-conv-wc" class="dynamic-list"></div>
+            </div>
+
+            <!-- Convocations — Command Staff -->
+            <div class="form-group">
+                <div class="group-header">
+                    <label>Convocations — Command Staff</label>
+                    <button type="button" class="btn-add" id="btn-add-conv-cs" title="Ajouter">+</button>
+                </div>
+                <div id="list-conv-cs" class="dynamic-list"></div>
+            </div>
+
+            <!-- Arrivées -->
             <div class="form-group">
                 <label for="field-arrivees">Arrivées</label>
                 <textarea id="field-arrivees" rows="3" placeholder="Ex : 21 | Marcus Bradford"></textarea>
             </div>
+
+            <!-- Départs -->
             <div class="form-group">
                 <label for="field-departs">Départs</label>
                 <textarea id="field-departs" rows="3" placeholder="Ex : 89 | Alvaro Pena"></textarea>
             </div>
+
             <div class="btn-row">
                 <button type="button" id="btn-download" class="btn btn-primary">Télécharger en PNG</button>
                 <button type="button" id="btn-reset" class="btn btn-secondary">Réinitialiser</button>
