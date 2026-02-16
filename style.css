@@ -1,7 +1,7 @@
 /* ===================================================
    CEREMONY REPORT — MISSION ROW
-   Style matching Vespucci: dark blue bg, golden
-   title boxes, white text, bold gold subcategories
+   Steel-blue / silver accent palette on dark blue bg
+   Logo placeholder, new 2-row layout
    1920×1080 landscape
    =================================================== */
 
@@ -10,7 +10,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: #111;
+    background: #0e0e18;
     color: #e0e0e0;
     min-height: 100vh;
     padding: 1.5rem;
@@ -18,8 +18,8 @@ body {
 
 /* ---------- UI Header ---------- */
 .page-header { text-align: center; margin-bottom: 1.5rem; }
-.page-header h1 { font-size: 1.3rem; font-weight: 700; color: #c8a84e; }
-.page-header .subtitle { color: #888; margin-top: 0.15rem; font-size: 0.82rem; }
+.page-header h1 { font-size: 1.3rem; font-weight: 700; color: #7ba7cc; }
+.page-header .subtitle { color: #666; margin-top: 0.15rem; font-size: 0.82rem; }
 
 /* ---------- Layout ---------- */
 .layout {
@@ -37,13 +37,13 @@ body {
     top: 1.5rem;
     max-height: calc(100vh - 3rem);
     overflow-y: auto;
-    background: #1a1a2a;
+    background: #141420;
     border-radius: 8px;
     padding: 1.4rem;
-    border: 1px solid #2a2a3a;
+    border: 1px solid #1e2a3a;
 }
 #editor-panel::-webkit-scrollbar { width: 4px; }
-#editor-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+#editor-panel::-webkit-scrollbar-thumb { background: #2a3a4a; border-radius: 2px; }
 
 .form-group { margin-bottom: 0.9rem; }
 .form-group label {
@@ -51,22 +51,22 @@ body {
     margin-bottom: 0.3rem;
     font-weight: 600;
     font-size: 0.8rem;
-    color: #c8a84e;
+    color: #7ba7cc;
 }
 .form-group input,
 .form-group textarea {
     width: 100%;
     padding: 0.5rem 0.65rem;
-    border: 1px solid #2a2a3a;
+    border: 1px solid #1e2a3a;
     border-radius: 5px;
-    background: #12121f;
-    color: #ddd;
+    background: #0c0c18;
+    color: #ccd;
     font-family: 'Inter', sans-serif;
     font-size: 0.82rem;
     resize: vertical;
 }
 .form-group input:focus,
-.form-group textarea:focus { outline: none; border-color: #c8a84e; }
+.form-group textarea:focus { outline: none; border-color: #5a90b8; }
 
 /* ---------- Buttons ---------- */
 .btn-row { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
@@ -79,10 +79,10 @@ body {
     font-weight: 600;
     cursor: pointer;
 }
-.btn-primary { background: #c8a84e; color: #111; }
-.btn-primary:hover { background: #d4b65c; }
-.btn-secondary { background: #2a2a3a; color: #888; }
-.btn-secondary:hover { background: #3a3a4a; color: #bbb; }
+.btn-primary { background: #5a90b8; color: #fff; }
+.btn-primary:hover { background: #6da3cc; }
+.btn-secondary { background: #1e2a3a; color: #778; }
+.btn-secondary:hover { background: #2a3a4a; color: #aab; }
 
 /* ---------- Preview ---------- */
 #preview-panel { flex: 1; display: flex; justify-content: center; overflow-x: auto; }
@@ -103,57 +103,97 @@ body {
     position: relative;
     overflow: hidden;
     font-family: 'Inter', sans-serif;
-
-    /* Dark blue gradient — matching Vespucci */
-    background: linear-gradient(160deg, #08101e 0%, #0c1a35 25%, #10224a 50%, #0c1a35 75%, #08101e 100%);
+    background: linear-gradient(160deg, #060d1a 0%, #0a1628 20%, #0e1f3d 50%, #0a1628 80%, #060d1a 100%);
 }
 
-/* ---- Title box (golden rounded box) ---- */
-.doc-title-box {
+/* ---- Watermark logo (centered, faded) ---- */
+.doc-watermark {
     position: absolute;
-    top: 38px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #d4b050, #b8922a);
-    border-radius: 10px;
-    padding: 13px 48px;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    opacity: 0.04;
+    z-index: 1;
+    pointer-events: none;
+}
+.doc-watermark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ---- Header band: [Logo] [Title+Date] [Logo] ---- */
+.doc-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
     z-index: 5;
+    padding: 0 60px;
 }
 
-.doc-title-box span {
+.doc-header-logo {
+    flex: 0 0 90px;
+    height: 90px;
+}
+.doc-header-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(90,144,184,0.3));
+}
+
+.doc-header-text {
+    text-align: center;
+    flex: 1;
+}
+
+.doc-title {
     font-family: 'Playfair Display', serif;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
-    color: #0a0f1a;
-    white-space: nowrap;
-    letter-spacing: 0.3px;
+    color: #c0d8ec;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 12px rgba(90,144,184,0.25);
 }
 
-/* ---- Date ---- */
 .doc-date {
-    position: absolute;
-    top: 108px;
-    left: 50%;
-    transform: translateX(-50%);
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 21px;
-    color: #d4b050;
+    font-size: 20px;
+    color: #7ba7cc;
+    margin-top: 4px;
+}
+
+/* ---- Separator ---- */
+.doc-separator {
+    position: absolute;
+    top: 130px;
+    left: 60px;
+    right: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #3a6a8e 20%, #5a90b8 50%, #3a6a8e 80%, transparent 100%);
     z-index: 5;
-    white-space: nowrap;
 }
 
 /* ---- Content grid ---- */
 .doc-main {
     position: absolute;
-    top: 165px;
+    top: 155px;
     left: 55px;
     right: 55px;
-    bottom: 25px;
+    bottom: 30px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr auto auto;
-    gap: 16px 28px;
+    grid-template-rows: 1fr auto;
+    gap: 18px 24px;
     align-content: start;
     z-index: 5;
 }
@@ -162,67 +202,72 @@ body {
 .doc-section {
     display: flex;
     flex-direction: column;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(90,144,184,0.12);
+    border-radius: 10px;
+    padding: 0 0 14px 0;
+    overflow: hidden;
 }
 
-/* Golden section header box */
+/* Section header */
 .doc-section-header {
-    background: linear-gradient(135deg, #d4b050, #b8922a);
-    border-radius: 8px;
-    padding: 7px 20px;
+    background: linear-gradient(135deg, #3a6a8e, #2a5070);
+    padding: 9px 20px;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .doc-section-header span {
     font-family: 'Playfair Display', serif;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
-    color: #0a0f1a;
+    color: #d8eaf5;
+    letter-spacing: 0.3px;
 }
 
 /* Content text */
 .doc-section-content {
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 400;
-    color: #ffffff;
-    line-height: 1.75;
-    padding: 0 4px;
+    color: #dde8f0;
+    line-height: 1.7;
+    padding: 0 14px;
 }
 
-/* Bold golden subcategory headers (ALL CAPS lines) */
+/* Subcategory headers (ALL CAPS lines) — light steel blue */
 .doc-subcategory {
     font-weight: 800;
-    color: #d4b050;
-    font-size: 13.5px;
+    color: #7bb8dc;
+    font-size: 13px;
     letter-spacing: 0.8px;
     margin-top: 8px;
     margin-bottom: 2px;
 }
 
-/* Spacer between groups */
-.doc-spacer { height: 6px; }
+/* Spacer */
+.doc-spacer { height: 5px; }
 
 /* Entry line */
 .doc-entry {
-    color: #ffffff;
-    font-size: 14.5px;
-    line-height: 1.75;
+    color: #dde8f0;
+    font-size: 14px;
+    line-height: 1.7;
 }
 
-/* Rappel line (with dash) */
+/* Rappel line */
 .doc-rappel {
-    color: #ffffff;
-    font-size: 14.5px;
-    line-height: 1.85;
-    padding-left: 4px;
+    color: #dde8f0;
+    font-size: 14px;
+    line-height: 1.8;
 }
 
-/* Grid placement — 3 column layout like Vespucci */
-/* Col 1: Rappels (full height) */
-/* Col 2: Promotions (full height) */
-/* Col 3: Convocations top, Arrivées mid, Départs bottom */
-.doc-section.col-rappels      { grid-column: 1; grid-row: 1 / 4; }
-.doc-section.col-promotions   { grid-column: 2; grid-row: 1 / 4; }
+/* ==============================
+   GRID PLACEMENT — NEW LAYOUT
+   Row 1: Rappels | Promotions | Convocations
+   Row 2: (empty) | Arrivées   | Départs
+   ============================== */
+.doc-section.col-rappels      { grid-column: 1; grid-row: 1 / 3; }
+.doc-section.col-promotions   { grid-column: 2; grid-row: 1 / 3; }
 .doc-section.col-convocations { grid-column: 3; grid-row: 1; }
 .doc-section.col-arrivees     { grid-column: 3; grid-row: 2; }
 .doc-section.col-departs      { grid-column: 3; grid-row: 3; }
@@ -230,11 +275,11 @@ body {
 /* ---- Placeholder ---- */
 .doc-placeholder {
     grid-column: 1 / -1;
-    color: rgba(255,255,255,0.15);
+    color: rgba(200,220,240,0.12);
     font-style: italic;
     text-align: center;
     font-size: 18px;
-    padding: 280px 0;
+    padding: 260px 0;
 }
 
 /* ==============================================
