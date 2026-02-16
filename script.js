@@ -32,7 +32,6 @@
     ];
 
     // ---- DOM refs ----
-    var fieldLogo    = document.getElementById('field-logo');
     var fieldDate    = document.getElementById('field-date');
     var fieldRappels = document.getElementById('field-rappels');
     var fieldArrivees = document.getElementById('field-arrivees');
@@ -45,14 +44,11 @@
     var listConvWC     = document.getElementById('list-conv-wc');
     var listConvCS     = document.getElementById('list-conv-cs');
 
-    var docLogo = document.getElementById('doc-logo');
     var docDate = document.getElementById('doc-date');
     var docBody = document.getElementById('doc-body');
 
     var btnDownload = document.getElementById('btn-download');
     var btnReset    = document.getElementById('btn-reset');
-
-    var logoDataURL = '';
 
     var STORAGE_KEY = 'ceremony_mr_draft_v2';
 
@@ -368,8 +364,7 @@
             convWC: readConvEntries(listConvWC),
             convCS: readConvEntries(listConvCS),
             arrivees: fieldArrivees.value,
-            departs: fieldDeparts.value,
-            logo: logoDataURL
+            departs: fieldDeparts.value
         };
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (_) {}
     }
@@ -401,11 +396,6 @@
             }
             if (d.arrivees) fieldArrivees.value = d.arrivees;
             if (d.departs) fieldDeparts.value = d.departs;
-            if (d.logo) {
-                logoDataURL = d.logo;
-                docLogo.src = logoDataURL;
-                docLogo.style.display = 'block';
-            }
         } catch (_) {}
     }
 
@@ -452,20 +442,6 @@
         f.addEventListener('input', onInput);
     });
 
-    // Logo file input
-    fieldLogo.addEventListener('change', function () {
-        var file = fieldLogo.files[0];
-        if (!file) return;
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            logoDataURL = e.target.result;
-            docLogo.src = logoDataURL;
-            docLogo.style.display = 'block';
-            onInput();
-        };
-        reader.readAsDataURL(file);
-    });
-
     // ---- Reset ----
     btnReset.addEventListener('click', function () {
         if (!confirm('R\u00e9initialiser tous les champs ?')) return;
@@ -473,10 +449,6 @@
         fieldRappels.value = '';
         fieldArrivees.value = '';
         fieldDeparts.value = '';
-        fieldLogo.value = '';
-        logoDataURL = '';
-        docLogo.src = '';
-        docLogo.style.display = 'none';
         listPromoCorps.innerHTML = '';
         listPromoDiv.innerHTML = '';
         listStripes.innerHTML = '';
