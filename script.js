@@ -1,40 +1,110 @@
 /* ===================================================
-   CEREMONY REPORT — MISSION ROW
-   Live preview, landscape 1920×1080
+   script.js — Ceremony Report Generator (Mission Row)
+   Live preview + PNG export — Vespucci style
    =================================================== */
 
 (function () {
     'use strict';
 
-    var fieldDate   = document.getElementById('field-date');
+    // ---- DOM refs ----
+    var fieldDate         = document.getElementById('field-date');
+    var fieldRappels      = document.getElementById('field-rappels');
+    var fieldPromotions   = document.getElementById('field-promotions');
+    var fieldConvocations = document.getElementById('field-convocations');
+    var fieldArrivees     = document.getElementById('field-arrivees');
+    var fieldDeparts      = document.getElementById('field-departs');
+
+    var docDate = document.getElementById('doc-date');
+    var docBody = document.getElementById('doc-body');
+
     var btnDownload = document.getElementById('btn-download');
     var btnReset    = document.getElementById('btn-reset');
-    var docDate     = document.getElementById('doc-date');
-    var docBody     = document.getElementById('doc-body');
 
-    var FIELDS = [
-        { id: 'field-date',         key: 'date' },
-        { id: 'field-rappels',      key: 'rappels' },
-        { id: 'field-promotions',   key: 'promotions' },
-        { id: 'field-convocations', key: 'convocations' },
-        { id: 'field-arrivees',     key: 'arrivees' },
-        { id: 'field-departs',      key: 'departs' },
-    ];
-
-    var SECTIONS = [
-        { key: 'rappels',      title: 'Rappels de la supervision', layout: 'wide' },
-        { key: 'promotions',   title: 'Promotions',                layout: 'normal' },
-        { key: 'convocations', title: 'Convocations',              layout: 'normal' },
-        { key: 'arrivees',     title: 'Arrivées',                  layout: 'normal' },
-        { key: 'departs',      title: 'Départs',                   layout: 'normal' },
-    ];
+    var FIELDS = [fieldDate, fieldRappels, fieldPromotions, fieldConvocations, fieldArrivees, fieldDeparts];
 
     var STORAGE_KEY = 'ceremony_mr_draft';
 
+    // ---- Helpers ----
+
+    function escapeHTML(str) {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    /** Detect if a line is a subcategory header (ALL CAPS, no | separator) */
+    function isSubcategory(line) {
+        var t = line.trim();
+        if (!t || t.length < 3) return false;
+        // Lines with | are entries, not subcategories
+        if (t.indexOf('|') !== -1) return false;
+        // Lines starting with a digit are entries
+        if (/^\d/.test(t)) return false;
+        // Lines starting with - are rappels
+        if (t.charAt(0) === '-') return false;
+        // Check if mostly uppercase
+        var letters = t.replace(/[^A-ZÀ-Ýa-zà-ý]/g, '');
+        if (letters.length < 2) return false;
+        var upper = t.replace(/[^A-ZÀ-Ý]/g, '');
+        return (upper.length / letters.length) > 0.8;
+    }
+
+    /** Parse multiline text into structured HTML (promotions, convocations, etc.) */
+    function parseContent(text) {
+        if (!text.trim()) return '';
+        var lines = text.split('\n');
+        var html = '';
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            var t = line.trim();
+            if (!t) {
+                html += '<div class="doc-spacer"></div>';
+            } else if (isSubcategory(t)) {
+                html += '<div class="doc-subcategory">' + escapeHTML(t) + '</div>';
+            } else {
+                html += '<div class="doc-entry">' + escapeHTML(t) + '</div>';
+            }
+        }
+        return html;
+    }
+
+    /** Parse rappels — prefix with dash if not already */
+    function parseRappels(text) {
+        if (!text.trim()) return '';
+        var lines = text.split('\n');
+        var html = '';
+        for (var i = 0; i < lines.length; i++) {
+            var t = lines[i].trim();
+            if (!t) {
+                html += '<div class="doc-spacer"></div>';
+                continue;
+            }
+            var display = t.charAt(0) === '-' ? t : '- ' + t;
+            html += '<div class="doc-rappel">' + escapeHTML(display) + '</div>';
+        }
+        return html;
+    }
+
+    /** Build one section block */
+    function makeSection(title, contentHTML, colClass) {
+        return '<div class="doc-section ' + colClass + '">' +
+            '<div class="doc-section-header"><span>' + escapeHTML(title) + '</span></div>' +
+            '<div class="doc-section-content">' + contentHTML + '</div>' +
+            '</div>';
+    }
+
     // ---- Storage ----
     function save() {
-        var data = {};
-        FIELDS.forEach(function (f) { data[f.key] = document.getElementById(f.id).value; });
+        var data = {
+            date: fieldDate.value,
+            rappels: fieldRappels.value,
+            promotions: fieldPromotions.value,
+            convocations: fieldConvocations.value,
+            arrivees: fieldArrivees.value,
+            departs: fieldDeparts.value
+        };
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (_) {}
     }
 
@@ -42,111 +112,119 @@
         try {
             var raw = localStorage.getItem(STORAGE_KEY);
             if (!raw) return;
-            var data = JSON.parse(raw);
-            FIELDS.forEach(function (f) {
-                if (data[f.key] !== undefined) document.getElementById(f.id).value = data[f.key];
-            });
+            var d = JSON.parse(raw);
+            if (d.date) fieldDate.value = d.date;
+            if (d.rappels) fieldRappels.value = d.rappels;
+            if (d.promotions) fieldPromotions.value = d.promotions;
+            if (d.convocations) fieldConvocations.value = d.convocations;
+            if (d.arrivees) fieldArrivees.value = d.arrivees;
+            if (d.departs) fieldDeparts.value = d.departs;
         } catch (_) {}
     }
 
-    // ---- Preview ----
-    function updatePreview() {
+    // ---- Render ----
+
+    function render() {
+        // Date
         var dateVal = fieldDate.value.trim();
-        docDate.textContent = dateVal ? dateVal : '';
+        docDate.textContent = dateVal || '';
 
-        docBody.innerHTML = '';
-        var filled = [];
+        // Collect content
+        var rappels      = fieldRappels.value;
+        var promotions   = fieldPromotions.value;
+        var convocations = fieldConvocations.value;
+        var arrivees     = fieldArrivees.value;
+        var departs      = fieldDeparts.value;
 
-        SECTIONS.forEach(function (sec) {
-            var text = document.getElementById('field-' + sec.key).value.trim();
-            if (text) filled.push({ title: sec.title, text: text, layout: sec.layout });
-        });
+        var hasR = rappels.trim().length > 0;
+        var hasP = promotions.trim().length > 0;
+        var hasC = convocations.trim().length > 0;
+        var hasA = arrivees.trim().length > 0;
+        var hasD = departs.trim().length > 0;
 
-        if (!filled.length && !dateVal) {
-            var ph = document.createElement('p');
-            ph.className = 'doc-placeholder';
-            ph.textContent = 'Remplissez le formulaire pour voir la prévisualisation.';
-            docBody.appendChild(ph);
+        if (!hasR && !hasP && !hasC && !hasA && !hasD && !dateVal) {
+            docBody.innerHTML = '<p class="doc-placeholder">Remplissez le formulaire pour voir la pr\u00e9visualisation.</p>';
             return;
         }
 
-        // If few sections, make them wider
-        if (filled.length === 1) filled[0].layout = 'wide';
-        if (filled.length === 2) { filled[0].layout = 'wide'; filled[1].layout = 'wide'; }
+        var html = '';
 
-        filled.forEach(function (sec) {
-            var section = document.createElement('div');
-            section.className = 'doc-section';
-            if (sec.layout === 'wide') section.classList.add('wide');
+        // Column 1 — Rappels
+        if (hasR) {
+            html += makeSection('Rappel de la semaine', parseRappels(rappels), 'col-rappels');
+        }
 
-            var title = document.createElement('div');
-            title.className = 'doc-section-title';
-            title.textContent = sec.title;
+        // Column 2 — Promotions
+        if (hasP) {
+            html += makeSection('Promotions', parseContent(promotions), 'col-promotions');
+        }
 
-            var content = document.createElement('div');
-            content.className = 'doc-section-content';
-            content.textContent = sec.text;
+        // Column 3 — stacked: Convocations, Arrivées, Départs
+        if (hasC) {
+            html += makeSection('Convocations', parseContent(convocations), 'col-convocations');
+        }
+        if (hasA) {
+            html += makeSection('Arriv\u00e9es', parseContent(arrivees), 'col-arrivees');
+        }
+        if (hasD) {
+            html += makeSection('D\u00e9parts', parseContent(departs), 'col-departs');
+        }
 
-            section.appendChild(title);
-            section.appendChild(content);
-            docBody.appendChild(section);
-        });
+        docBody.innerHTML = html || '<p class="doc-placeholder">Remplissez le formulaire...</p>';
     }
 
-    // ---- Input handler ----
+    // ---- Events ----
     var saveTimer = null;
     function onInput() {
-        updatePreview();
+        render();
         clearTimeout(saveTimer);
         saveTimer = setTimeout(save, 400);
     }
 
-    FIELDS.forEach(function (f) {
-        document.getElementById(f.id).addEventListener('input', onInput);
+    FIELDS.forEach(function (f) { f.addEventListener('input', onInput); });
+
+    // ---- Reset ----
+    btnReset.addEventListener('click', function () {
+        if (!confirm('R\u00e9initialiser tous les champs ?')) return;
+        FIELDS.forEach(function (f) { f.value = ''; });
+        try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+        render();
     });
 
-    // ---- PNG export ----
+    // ---- PNG Export ----
     btnDownload.addEventListener('click', function () {
-        var target = document.getElementById('document');
-        btnDownload.textContent = 'Génération...';
+        var doc = document.getElementById('document');
+        btnDownload.textContent = 'G\u00e9n\u00e9ration...';
         btnDownload.disabled = true;
 
-        var orig = target.style.transform;
-        target.style.transform = 'none';
+        var origTransform = doc.style.transform;
+        doc.style.transform = 'none';
 
-        html2canvas(target, {
+        html2canvas(doc, {
             width: 1920,
             height: 1080,
             scale: 1,
             useCORS: true,
-            backgroundColor: '#ffffff',
+            backgroundColor: null
         }).then(function (canvas) {
-            target.style.transform = orig;
+            doc.style.transform = origTransform;
             var link = document.createElement('a');
-            var slug = fieldDate.value.trim().replace(/[\/\s]+/g, '_') || 'sans_date';
+            var slug = fieldDate.value.trim().replace(/[\s\/]+/g, '_') || 'sans_date';
             link.download = 'ceremonie_mission_row_' + slug + '.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         }).catch(function (err) {
-            target.style.transform = orig;
-            console.error(err);
+            doc.style.transform = origTransform;
+            console.error('Export failed:', err);
             alert('Erreur lors de l\'export PNG.');
         }).finally(function () {
-            btnDownload.textContent = 'Télécharger en PNG';
+            btnDownload.textContent = 'T\u00e9l\u00e9charger en PNG';
             btnDownload.disabled = false;
         });
     });
 
-    // ---- Reset ----
-    btnReset.addEventListener('click', function () {
-        if (!confirm('Réinitialiser tous les champs ?')) return;
-        FIELDS.forEach(function (f) { document.getElementById(f.id).value = ''; });
-        try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
-        updatePreview();
-    });
-
     // ---- Init ----
     load();
-    updatePreview();
+    render();
 
 })();
