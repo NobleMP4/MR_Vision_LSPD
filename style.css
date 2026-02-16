@@ -188,6 +188,7 @@ body {
 
 /* ==============================================
    THE DOCUMENT — 1920x1080
+   New style: dark navy, cyan accents, LSPD theme
    ============================================== */
 #document {
     width: 1920px;
@@ -197,114 +198,133 @@ body {
     position: relative;
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
-
-    /* Dark blue gradient */
-    background: linear-gradient(160deg, #08101e 0%, #0c1a35 25%, #10224a 50%, #0c1a35 75%, #08101e 100%);
+    background: linear-gradient(160deg, #060d1a 0%, #0a1628 30%, #0e1f3d 50%, #0a1628 70%, #060d1a 100%);
 }
 
-/* ---- Logo ---- */
-.doc-logo {
-    position: absolute;
-    top: 16px;
-    left: 28px;
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
+/* ---- Header bar ---- */
+.doc-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 24px 40px 16px;
     z-index: 6;
 }
 
-/* ---- Title box (grey-silver rounded box) ---- */
-.doc-title-box {
-    position: absolute;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #b0b8c0, #8a929a);
-    border-radius: 10px;
-    padding: 14px 54px;
-    z-index: 5;
+.doc-logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    flex-shrink: 0;
+    margin-right: 30px;
 }
 
-.doc-title-box span {
+.doc-header-text {
+    flex: 1;
+    text-align: center;
+    padding-right: 120px; /* offset for logo balance */
+}
+
+.doc-header-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 42px;
+    font-size: 44px;
     font-weight: 800;
-    color: #0a0f1a;
-    white-space: nowrap;
-    letter-spacing: 0.5px;
+    color: #ffffff;
     text-transform: uppercase;
+    letter-spacing: 3px;
 }
 
-/* ---- Date ---- */
-.doc-date {
-    position: absolute;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%);
+.doc-header-subtitle {
     font-family: 'Montserrat', sans-serif;
-    font-style: italic;
+    font-size: 22px;
     font-weight: 500;
-    font-size: 30px;
-    color: #b0b8c0;
-    z-index: 5;
-    white-space: nowrap;
+    color: #8aa8c7;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 4px;
+}
+
+.doc-header-subtitle #doc-date {
+    color: #ffffff;
+}
+
+/* ---- Cyan separator line ---- */
+.doc-header-line {
+    position: relative;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 2%, #00d4ff 15%, #00d4ff 85%, transparent 98%);
+    margin: 0 40px;
+    z-index: 6;
 }
 
 /* ---- Content grid ---- */
 .doc-main {
     position: absolute;
-    top: 150px;
-    left: 28px;
-    right: 28px;
-    bottom: 18px;
+    top: 155px;
+    left: 40px;
+    right: 40px;
+    bottom: 24px;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 3fr 2fr;
-    gap: 16px 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0;
     z-index: 5;
+}
+
+/* ---- Column separators ---- */
+.doc-column {
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px;
+    overflow: hidden;
+}
+.doc-column:not(:first-child) {
+    border-left: 2px solid rgba(0, 212, 255, 0.35);
 }
 
 /* ---- Section blocks ---- */
 .doc-section {
     display: flex;
     flex-direction: column;
+    margin-bottom: 16px;
 }
 
-/* Grey-silver section header box */
+/* Section header — underlined cyan style */
 .doc-section-header {
-    background: linear-gradient(135deg, #b0b8c0, #8a929a);
-    border-radius: 8px;
-    padding: 10px 24px;
+    background: none;
+    border-radius: 0;
+    padding: 0 0 8px 0;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #00d4ff;
 }
 
 .doc-section-header span {
     font-family: 'Montserrat', sans-serif;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 700;
-    color: #0a0f1a;
+    color: #ffffff;
     text-transform: uppercase;
+    letter-spacing: 1.5px;
 }
 
 /* Content text */
 .doc-section-content {
-    font-size: 21px;
+    font-size: 18px;
     font-weight: 400;
     color: #ffffff;
-    line-height: 1.65;
-    padding: 0 10px;
+    line-height: 1.6;
+    padding: 0 4px;
 }
 
-/* Bold silver subcategory headers */
+/* Subcategory headers */
 .doc-subcategory {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    color: #b0b8c0;
-    font-size: 20px;
+    color: #00d4ff;
+    font-size: 16px;
     letter-spacing: 0.8px;
     margin-top: 10px;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     text-transform: uppercase;
     text-align: center;
 }
@@ -315,40 +335,60 @@ body {
 /* Entry line */
 .doc-entry {
     color: #ffffff;
-    font-size: 21px;
-    line-height: 1.65;
+    font-size: 18px;
+    line-height: 1.55;
     text-align: center;
+}
+
+/* Arrival entry — green dot */
+.doc-entry-arrival {
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 1.55;
+    text-align: left;
+    padding-left: 20px;
+    position: relative;
+}
+.doc-entry-arrival::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2ecc71;
+}
+
+/* Departure entry — red dot */
+.doc-entry-departure {
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 1.55;
+    text-align: left;
+    padding-left: 20px;
+    position: relative;
+}
+.doc-entry-departure::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e74c3c;
 }
 
 /* Rappel line (with dash) */
 .doc-rappel {
     color: #ffffff;
-    font-size: 21px;
-    line-height: 1.75;
+    font-size: 18px;
+    line-height: 1.6;
     padding-left: 6px;
 }
-
-/* Grid placement — 3 columns
-   Without stripes (2 rows):
-     Row 1: Rappels | Promotions | Convocations
-     Row 2: Arrivées (2 cols) | Départs
-   With stripes (2 rows):
-     Row 1: Rappels | Promotions | Convocations
-     Row 2: Service Stripes | Arrivées | Départs */
-.doc-section.col-rappels      { grid-column: 1; grid-row: 1; }
-.doc-section.col-promotions   { grid-column: 2; grid-row: 1; }
-.doc-section.col-convocations { grid-column: 3; grid-row: 1; }
-.doc-section.col-stripes      { grid-column: 1; grid-row: 2; }
-
-/* Default (no stripes): Arrivées spans 2 cols */
-.doc-section.col-arrivees     { grid-column: 1 / 3; grid-row: 2; }
-=======
-.doc-section.col-arrivees     { grid-column: 2 / 3; grid-row: 2; }
-.doc-section.col-departs      { grid-column: 3; grid-row: 2; }
-
-/* With stripes: Arrivées and Départs shift */
-.doc-main.has-stripes .col-arrivees { grid-column: 2; grid-row: 2; }
-.doc-main.has-stripes .col-departs  { grid-column: 3; grid-row: 2; }
 
 /* ---- Placeholder ---- */
 .doc-placeholder {

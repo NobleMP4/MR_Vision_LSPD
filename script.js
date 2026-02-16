@@ -330,7 +330,7 @@
         return html;
     }
 
-    function parseSimpleContent(text) {
+    function parseArrivals(text) {
         if (!text.trim()) return '';
         var lines = text.split('\n');
         var html = '';
@@ -339,14 +339,29 @@
             if (!t) {
                 html += '<div class="doc-spacer"></div>';
             } else {
-                html += '<div class="doc-entry">' + escapeHTML(t) + '</div>';
+                html += '<div class="doc-entry-arrival">' + escapeHTML(t) + '</div>';
             }
         }
         return html;
     }
 
-    function makeSection(title, contentHTML, colClass) {
-        return '<div class="doc-section ' + colClass + '">' +
+    function parseDepartures(text) {
+        if (!text.trim()) return '';
+        var lines = text.split('\n');
+        var html = '';
+        for (var i = 0; i < lines.length; i++) {
+            var t = lines[i].trim();
+            if (!t) {
+                html += '<div class="doc-spacer"></div>';
+            } else {
+                html += '<div class="doc-entry-departure">' + escapeHTML(t) + '</div>';
+            }
+        }
+        return html;
+    }
+
+    function makeSection(title, contentHTML) {
+        return '<div class="doc-section">' +
             '<div class="doc-section-header"><span>' + escapeHTML(title) + '</span></div>' +
             '<div class="doc-section-content">' + contentHTML + '</div>' +
             '</div>';
@@ -407,24 +422,26 @@
 
         // Service Stripes — conditional
         var stripesHTML = renderStripes();
-        var hasStripes = stripesHTML !== '';
 
-        // Toggle grid class
-        if (hasStripes) {
-            docBody.classList.add('has-stripes');
-        } else {
-            docBody.classList.remove('has-stripes');
+        // Build 3 columns
+        var col1 = '';
+        col1 += makeSection('Rappel de la semaine', parseRappels(fieldRappels.value));
+        if (stripesHTML) {
+            col1 += makeSection('Service Stripes', stripesHTML);
         }
+
+        var col2 = '';
+        col2 += makeSection('Promotions', renderPromotions());
+
+        var col3 = '';
+        col3 += makeSection('Convocations', renderConvocations());
+        col3 += makeSection('Arriv\u00e9es', parseArrivals(fieldArrivees.value));
+        col3 += makeSection('D\u00e9parts', parseDepartures(fieldDeparts.value));
 
         var html = '';
-        html += makeSection('Rappel de la semaine', parseRappels(fieldRappels.value), 'col-rappels');
-        html += makeSection('Promotions', renderPromotions(), 'col-promotions');
-        html += makeSection('Convocations', renderConvocations(), 'col-convocations');
-        if (hasStripes) {
-            html += makeSection('Service Stripes', stripesHTML, 'col-stripes');
-        }
-        html += makeSection('Arriv\u00e9es', parseSimpleContent(fieldArrivees.value), 'col-arrivees');
-        html += makeSection('D\u00e9parts', parseSimpleContent(fieldDeparts.value), 'col-departs');
+        html += '<div class="doc-column">' + col1 + '</div>';
+        html += '<div class="doc-column">' + col2 + '</div>';
+        html += '<div class="doc-column">' + col3 + '</div>';
 
         docBody.innerHTML = html;
     }
