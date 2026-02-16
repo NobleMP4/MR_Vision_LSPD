@@ -1,20 +1,18 @@
 /* ===================================================
-   CEREMONY REPORT GENERATOR — MISSION ROW
-   Live preview, landscape 1920×1080, grid layout
+   CEREMONY REPORT — MISSION ROW
+   Live preview, landscape 1920×1080
    =================================================== */
 
 (function () {
     'use strict';
 
-    // ---- DOM references ----
-    const fieldDate         = document.getElementById('field-date');
-    const btnDownload       = document.getElementById('btn-download');
-    const btnReset          = document.getElementById('btn-reset');
-    const docDate           = document.getElementById('doc-date');
-    const docBody           = document.getElementById('doc-body');
+    var fieldDate   = document.getElementById('field-date');
+    var btnDownload = document.getElementById('btn-download');
+    var btnReset    = document.getElementById('btn-reset');
+    var docDate     = document.getElementById('doc-date');
+    var docBody     = document.getElementById('doc-body');
 
-    // Field config
-    const FIELDS = [
+    var FIELDS = [
         { id: 'field-date',         key: 'date' },
         { id: 'field-rappels',      key: 'rappels' },
         { id: 'field-promotions',   key: 'promotions' },
@@ -23,9 +21,7 @@
         { id: 'field-departs',      key: 'departs' },
     ];
 
-    // Section definitions with smart grid spanning
-    // layout: "normal" = 1 col, "wide" = full row, "span-2" = 2 cols
-    const SECTIONS = [
+    var SECTIONS = [
         { key: 'rappels',      title: 'Rappels de la supervision', layout: 'wide' },
         { key: 'promotions',   title: 'Promotions',                layout: 'normal' },
         { key: 'convocations', title: 'Convocations',              layout: 'normal' },
@@ -33,71 +29,55 @@
         { key: 'departs',      title: 'Départs',                   layout: 'normal' },
     ];
 
-    const STORAGE_KEY = 'ceremony_mr_draft';
+    var STORAGE_KEY = 'ceremony_mr_draft';
 
-    // ---- LocalStorage ----
-    function saveToStorage() {
+    // ---- Storage ----
+    function save() {
         var data = {};
-        FIELDS.forEach(function (f) {
-            data[f.key] = document.getElementById(f.id).value;
-        });
+        FIELDS.forEach(function (f) { data[f.key] = document.getElementById(f.id).value; });
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (_) {}
     }
 
-    function loadFromStorage() {
+    function load() {
         try {
             var raw = localStorage.getItem(STORAGE_KEY);
             if (!raw) return;
             var data = JSON.parse(raw);
             FIELDS.forEach(function (f) {
-                if (data[f.key] !== undefined) {
-                    document.getElementById(f.id).value = data[f.key];
-                }
+                if (data[f.key] !== undefined) document.getElementById(f.id).value = data[f.key];
             });
         } catch (_) {}
     }
 
-    // ---- Live preview ----
+    // ---- Preview ----
     function updatePreview() {
         var dateVal = fieldDate.value.trim();
-        docDate.textContent = dateVal || '';
+        docDate.textContent = dateVal ? dateVal : '';
 
         docBody.innerHTML = '';
-        var hasContent = false;
-
-        // Collect filled sections
         var filled = [];
+
         SECTIONS.forEach(function (sec) {
             var text = document.getElementById('field-' + sec.key).value.trim();
-            if (text) {
-                filled.push({ title: sec.title, text: text, layout: sec.layout });
-                hasContent = true;
-            }
+            if (text) filled.push({ title: sec.title, text: text, layout: sec.layout });
         });
 
-        if (!hasContent && !dateVal) {
+        if (!filled.length && !dateVal) {
             var ph = document.createElement('p');
             ph.className = 'doc-placeholder';
-            ph.textContent = 'Remplissez le formulaire pour générer le document...';
+            ph.textContent = 'Remplissez le formulaire pour voir la prévisualisation.';
             docBody.appendChild(ph);
             return;
         }
 
-        // Smart layout: if only a few sections, make them wider
-        if (filled.length === 1) {
-            filled[0].layout = 'wide';
-        } else if (filled.length === 2) {
-            filled.forEach(function (s) { s.layout = 'span-2'; });
-            // Actually for 2 items, let them each take half or use span-2 for first
-            filled[0].layout = 'wide';
-            filled[1].layout = 'wide';
-        }
+        // If few sections, make them wider
+        if (filled.length === 1) filled[0].layout = 'wide';
+        if (filled.length === 2) { filled[0].layout = 'wide'; filled[1].layout = 'wide'; }
 
         filled.forEach(function (sec) {
             var section = document.createElement('div');
             section.className = 'doc-section';
             if (sec.layout === 'wide') section.classList.add('wide');
-            if (sec.layout === 'span-2') section.classList.add('span-2');
 
             var title = document.createElement('div');
             title.className = 'doc-section-title';
@@ -113,27 +93,25 @@
         });
     }
 
-    // Debounce save, instant preview
+    // ---- Input handler ----
     var saveTimer = null;
     function onInput() {
         updatePreview();
         clearTimeout(saveTimer);
-        saveTimer = setTimeout(saveToStorage, 400);
+        saveTimer = setTimeout(save, 400);
     }
 
     FIELDS.forEach(function (f) {
         document.getElementById(f.id).addEventListener('input', onInput);
     });
 
-    // ---- Download PNG ----
-    function downloadPNG() {
+    // ---- PNG export ----
+    btnDownload.addEventListener('click', function () {
         var target = document.getElementById('document');
-
-        btnDownload.textContent = 'GÉNÉRATION...';
+        btnDownload.textContent = 'Génération...';
         btnDownload.disabled = true;
 
-        // Temporarily remove transform for full-res capture
-        var origTransform = target.style.transform;
+        var orig = target.style.transform;
         target.style.transform = 'none';
 
         html2canvas(target, {
@@ -141,41 +119,34 @@
             height: 1080,
             scale: 1,
             useCORS: true,
-            backgroundColor: null,
+            backgroundColor: '#ffffff',
         }).then(function (canvas) {
-            target.style.transform = origTransform;
-
+            target.style.transform = orig;
             var link = document.createElement('a');
-            var dateSlug = fieldDate.value.trim().replace(/[\/\s]+/g, '_') || 'sans_date';
-            link.download = 'ceremonie_mission_row_' + dateSlug + '.png';
+            var slug = fieldDate.value.trim().replace(/[\/\s]+/g, '_') || 'sans_date';
+            link.download = 'ceremonie_mission_row_' + slug + '.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         }).catch(function (err) {
-            target.style.transform = origTransform;
-            console.error('Export PNG error:', err);
-            alert('Erreur lors de la génération PNG.');
+            target.style.transform = orig;
+            console.error(err);
+            alert('Erreur lors de l\'export PNG.');
         }).finally(function () {
-            btnDownload.textContent = 'TÉLÉCHARGER EN PNG';
+            btnDownload.textContent = 'Télécharger en PNG';
             btnDownload.disabled = false;
         });
-    }
+    });
 
     // ---- Reset ----
-    function resetForm() {
+    btnReset.addEventListener('click', function () {
         if (!confirm('Réinitialiser tous les champs ?')) return;
-        FIELDS.forEach(function (f) {
-            document.getElementById(f.id).value = '';
-        });
+        FIELDS.forEach(function (f) { document.getElementById(f.id).value = ''; });
         try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
         updatePreview();
-    }
-
-    // ---- Bindings ----
-    btnDownload.addEventListener('click', downloadPNG);
-    btnReset.addEventListener('click', resetForm);
+    });
 
     // ---- Init ----
-    loadFromStorage();
+    load();
     updatePreview();
 
 })();
