@@ -142,13 +142,6 @@ body {
 .entry-row .field-name { flex: 2; }
 .entry-row .field-stripes { flex: 1.2; }
 
-/* File input styling */
-input[type="file"] {
-    font-size: 0.78rem;
-    color: #999;
-    cursor: pointer;
-}
-
 /* Delete button */
 .btn-remove {
     width: 22px;
@@ -218,7 +211,6 @@ input[type="file"] {
     height: 80px;
     object-fit: contain;
     z-index: 6;
-    display: none;
 }
 
 /* ---- Title box (grey-silver rounded box) ---- */
