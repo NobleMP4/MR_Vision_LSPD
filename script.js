@@ -25,7 +25,14 @@
         'Air Support Division'
     ];
 
+    var SERVICE_STRIPES = [
+        '1 Service Stripe', '2 Service Stripes', '3 Service Stripes',
+        '4 Service Stripes', '5 Service Stripes', '6 Service Stripes',
+        '7 Service Stripes'
+    ];
+
     // ---- DOM refs ----
+    var fieldLogo    = document.getElementById('field-logo');
     var fieldDate    = document.getElementById('field-date');
     var fieldRappels = document.getElementById('field-rappels');
     var fieldArrivees = document.getElementById('field-arrivees');
@@ -33,15 +40,19 @@
 
     var listPromoCorps = document.getElementById('list-promo-corps');
     var listPromoDiv   = document.getElementById('list-promo-div');
+    var listStripes    = document.getElementById('list-stripes');
     var listConvSup    = document.getElementById('list-conv-sup');
     var listConvWC     = document.getElementById('list-conv-wc');
     var listConvCS     = document.getElementById('list-conv-cs');
 
+    var docLogo = document.getElementById('doc-logo');
     var docDate = document.getElementById('doc-date');
     var docBody = document.getElementById('doc-body');
 
     var btnDownload = document.getElementById('btn-download');
     var btnReset    = document.getElementById('btn-reset');
+
+    var logoDataURL = '';
 
     var STORAGE_KEY = 'ceremony_mr_draft_v2';
 
@@ -135,9 +146,20 @@
         list.appendChild(row);
     }
 
+    function addStripeRow(data) {
+        var row = document.createElement('div');
+        row.className = 'entry-row';
+        row.appendChild(makeSelect(SERVICE_STRIPES, 'field-stripes', 'Stripes...', data && data.stripe));
+        row.appendChild(makeInput('field-matricule', 'N\u00b0', data && data.matricule));
+        row.appendChild(makeInput('field-name', 'Nom Pr\u00e9nom', data && data.name));
+        row.appendChild(makeRemoveBtn(row));
+        listStripes.appendChild(row);
+    }
+
     // ---- + Button listeners ----
     document.getElementById('btn-add-promo-corps').addEventListener('click', function () { addPromoCorpsRow(); onInput(); });
     document.getElementById('btn-add-promo-div').addEventListener('click', function () { addPromoDivRow(); onInput(); });
+    document.getElementById('btn-add-stripes').addEventListener('click', function () { addStripeRow(); onInput(); });
     document.getElementById('btn-add-conv-sup').addEventListener('click', function () { addConvRow(listConvSup); onInput(); });
     document.getElementById('btn-add-conv-wc').addEventListener('click', function () { addConvRow(listConvWC); onInput(); });
     document.getElementById('btn-add-conv-cs').addEventListener('click', function () { addConvRow(listConvCS); onInput(); });
@@ -187,7 +209,36 @@
         return entries;
     }
 
+    function readStripes() {
+        var rows = listStripes.querySelectorAll('.entry-row');
+        var entries = [];
+        for (var i = 0; i < rows.length; i++) {
+            var stripe = rows[i].querySelector('.field-stripes').value;
+            var matricule = rows[i].querySelector('.field-matricule').value.trim();
+            var name = rows[i].querySelector('.field-name').value.trim();
+            if (stripe || matricule || name) {
+                entries.push({ stripe: stripe, matricule: matricule, name: name });
+            }
+        }
+        return entries;
+    }
+
     // ---- Rendering ----
+
+    function renderStripes() {
+        var stripes = readStripes();
+        if (stripes.length === 0) return '';
+        var html = '';
+        for (var i = 0; i < stripes.length; i++) {
+            var s = stripes[i];
+            var line = '';
+            if (s.stripe) line += s.stripe.toUpperCase();
+            if (s.matricule) line += ' : ' + s.matricule;
+            if (s.name) line += ' | ' + s.name;
+            if (line) html += '<div class="doc-entry">' + escapeHTML(line) + '</div>';
+        }
+        return html;
+    }
 
     function parseRappels(text) {
         if (!text.trim()) return '';
@@ -312,11 +363,13 @@
             rappels: fieldRappels.value,
             promoCorps: readPromoCorps(),
             promoDiv: readPromoDiv(),
+            stripes: readStripes(),
             convSup: readConvEntries(listConvSup),
             convWC: readConvEntries(listConvWC),
             convCS: readConvEntries(listConvCS),
             arrivees: fieldArrivees.value,
-            departs: fieldDeparts.value
+            departs: fieldDeparts.value,
+            logo: logoDataURL
         };
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (_) {}
     }
@@ -334,6 +387,9 @@
             if (d.promoDiv) {
                 for (var j = 0; j < d.promoDiv.length; j++) addPromoDivRow(d.promoDiv[j]);
             }
+            if (d.stripes) {
+                for (var s = 0; s < d.stripes.length; s++) addStripeRow(d.stripes[s]);
+            }
             if (d.convSup) {
                 for (var k = 0; k < d.convSup.length; k++) addConvRow(listConvSup, d.convSup[k]);
             }
@@ -345,6 +401,11 @@
             }
             if (d.arrivees) fieldArrivees.value = d.arrivees;
             if (d.departs) fieldDeparts.value = d.departs;
+            if (d.logo) {
+                logoDataURL = d.logo;
+                docLogo.src = logoDataURL;
+                docLogo.style.display = 'block';
+            }
         } catch (_) {}
     }
 
@@ -354,10 +415,24 @@
         var dateVal = fieldDate.value.trim();
         docDate.textContent = dateVal || '';
 
+        // Service Stripes — conditional
+        var stripesHTML = renderStripes();
+        var hasStripes = stripesHTML !== '';
+
+        // Toggle grid class
+        if (hasStripes) {
+            docBody.classList.add('has-stripes');
+        } else {
+            docBody.classList.remove('has-stripes');
+        }
+
         var html = '';
         html += makeSection('Rappel de la semaine', parseRappels(fieldRappels.value), 'col-rappels');
         html += makeSection('Promotions', renderPromotions(), 'col-promotions');
         html += makeSection('Convocations', renderConvocations(), 'col-convocations');
+        if (hasStripes) {
+            html += makeSection('Service Stripes', stripesHTML, 'col-stripes');
+        }
         html += makeSection('Arriv\u00e9es', parseSimpleContent(fieldArrivees.value), 'col-arrivees');
         html += makeSection('D\u00e9parts', parseSimpleContent(fieldDeparts.value), 'col-departs');
 
@@ -377,6 +452,20 @@
         f.addEventListener('input', onInput);
     });
 
+    // Logo file input
+    fieldLogo.addEventListener('change', function () {
+        var file = fieldLogo.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            logoDataURL = e.target.result;
+            docLogo.src = logoDataURL;
+            docLogo.style.display = 'block';
+            onInput();
+        };
+        reader.readAsDataURL(file);
+    });
+
     // ---- Reset ----
     btnReset.addEventListener('click', function () {
         if (!confirm('R\u00e9initialiser tous les champs ?')) return;
@@ -384,8 +473,13 @@
         fieldRappels.value = '';
         fieldArrivees.value = '';
         fieldDeparts.value = '';
+        fieldLogo.value = '';
+        logoDataURL = '';
+        docLogo.src = '';
+        docLogo.style.display = 'none';
         listPromoCorps.innerHTML = '';
         listPromoDiv.innerHTML = '';
+        listStripes.innerHTML = '';
         listConvSup.innerHTML = '';
         listConvWC.innerHTML = '';
         listConvCS.innerHTML = '';

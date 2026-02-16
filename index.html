@@ -22,6 +22,12 @@
     <div id="editor-panel">
         <form id="ceremony-form" autocomplete="off">
 
+            <!-- Logo -->
+            <div class="form-group">
+                <label for="field-logo">Logo</label>
+                <input type="file" id="field-logo" accept="image/*">
+            </div>
+
             <!-- Date -->
             <div class="form-group">
                 <label for="field-date">Date</label>
@@ -50,6 +56,15 @@
                     <button type="button" class="btn-add" id="btn-add-promo-div" title="Ajouter">+</button>
                 </div>
                 <div id="list-promo-div" class="dynamic-list"></div>
+            </div>
+
+            <!-- Service Stripes -->
+            <div class="form-group">
+                <div class="group-header">
+                    <label>Service Stripes</label>
+                    <button type="button" class="btn-add" id="btn-add-stripes" title="Ajouter">+</button>
+                </div>
+                <div id="list-stripes" class="dynamic-list"></div>
             </div>
 
             <!-- Convocations — Superviseur -->
@@ -102,6 +117,9 @@
     <div id="preview-panel">
         <div id="document-wrapper">
             <div id="document">
+
+                <!-- Logo -->
+                <img id="doc-logo" class="doc-logo" src="" alt="">
 
                 <!-- Title box -->
                 <div class="doc-title-box">
