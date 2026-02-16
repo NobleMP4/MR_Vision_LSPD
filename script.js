@@ -1,6 +1,6 @@
 /* ===================================================
    script.js — Ceremony Report Generator (Mission Row)
-   Live preview + PNG export — Vespucci style
+   Live preview + PNG export — Steel blue theme
    =================================================== */
 
 (function () {
@@ -24,6 +24,35 @@
 
     var STORAGE_KEY = 'ceremony_mr_draft';
 
+    // ---- Placeholder logo (SVG badge silhouette as data URI) ----
+    // Used when logo.png is missing or fails to load
+    var PLACEHOLDER_LOGO = 'data:image/svg+xml,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none">' +
+        '<path d="M100 10 L145 45 L170 100 L155 160 L100 230 L45 160 L30 100 L55 45 Z" ' +
+        'stroke="#5a90b8" stroke-width="3" fill="#0e1f3d"/>' +
+        '<circle cx="100" cy="115" r="45" stroke="#5a90b8" stroke-width="2" fill="none"/>' +
+        '<circle cx="100" cy="115" r="30" stroke="#3a6a8e" stroke-width="1.5" fill="none"/>' +
+        '<text x="100" y="110" text-anchor="middle" font-family="sans-serif" font-size="14" ' +
+        'font-weight="bold" fill="#7ba7cc">LSPD</text>' +
+        '<text x="100" y="128" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5a8aaa">LOGO</text>' +
+        '<path d="M100 10 L100 40 M55 45 L75 60 M145 45 L125 60" stroke="#3a6a8e" stroke-width="1.5"/>' +
+        '</svg>'
+    );
+
+    // Apply placeholder to all logo images if they fail to load
+    function setupLogoFallbacks() {
+        var imgs = ['watermark-img', 'header-logo-img', 'header-logo-img-r'];
+        imgs.forEach(function (id) {
+            var img = document.getElementById(id);
+            if (!img) return;
+            img.onerror = function () { this.src = PLACEHOLDER_LOGO; };
+            // If already broken (no src or failed)
+            if (!img.complete || img.naturalWidth === 0) {
+                img.src = PLACEHOLDER_LOGO;
+            }
+        });
+    }
+
     // ---- Helpers ----
 
     function escapeHTML(str) {
@@ -34,31 +63,26 @@
             .replace(/"/g, '&quot;');
     }
 
-    /** Detect if a line is a subcategory header (ALL CAPS, no | separator) */
+    /** Detect subcategory header (ALL CAPS, no | separator) */
     function isSubcategory(line) {
         var t = line.trim();
         if (!t || t.length < 3) return false;
-        // Lines with | are entries, not subcategories
         if (t.indexOf('|') !== -1) return false;
-        // Lines starting with a digit are entries
         if (/^\d/.test(t)) return false;
-        // Lines starting with - are rappels
         if (t.charAt(0) === '-') return false;
-        // Check if mostly uppercase
         var letters = t.replace(/[^A-ZÀ-Ýa-zà-ý]/g, '');
         if (letters.length < 2) return false;
         var upper = t.replace(/[^A-ZÀ-Ý]/g, '');
         return (upper.length / letters.length) > 0.8;
     }
 
-    /** Parse multiline text into structured HTML (promotions, convocations, etc.) */
+    /** Parse multiline text with subcategory detection */
     function parseContent(text) {
         if (!text.trim()) return '';
         var lines = text.split('\n');
         var html = '';
         for (var i = 0; i < lines.length; i++) {
-            var line = lines[i];
-            var t = line.trim();
+            var t = lines[i].trim();
             if (!t) {
                 html += '<div class="doc-spacer"></div>';
             } else if (isSubcategory(t)) {
@@ -70,17 +94,14 @@
         return html;
     }
 
-    /** Parse rappels — prefix with dash if not already */
+    /** Parse rappels (auto-prefix with dash) */
     function parseRappels(text) {
         if (!text.trim()) return '';
         var lines = text.split('\n');
         var html = '';
         for (var i = 0; i < lines.length; i++) {
             var t = lines[i].trim();
-            if (!t) {
-                html += '<div class="doc-spacer"></div>';
-                continue;
-            }
+            if (!t) { html += '<div class="doc-spacer"></div>'; continue; }
             var display = t.charAt(0) === '-' ? t : '- ' + t;
             html += '<div class="doc-rappel">' + escapeHTML(display) + '</div>';
         }
@@ -125,11 +146,9 @@
     // ---- Render ----
 
     function render() {
-        // Date
         var dateVal = fieldDate.value.trim();
         docDate.textContent = dateVal || '';
 
-        // Collect content
         var rappels      = fieldRappels.value;
         var promotions   = fieldPromotions.value;
         var convocations = fieldConvocations.value;
@@ -149,26 +168,11 @@
 
         var html = '';
 
-        // Column 1 — Rappels
-        if (hasR) {
-            html += makeSection('Rappel de la semaine', parseRappels(rappels), 'col-rappels');
-        }
-
-        // Column 2 — Promotions
-        if (hasP) {
-            html += makeSection('Promotions', parseContent(promotions), 'col-promotions');
-        }
-
-        // Column 3 — stacked: Convocations, Arrivées, Départs
-        if (hasC) {
-            html += makeSection('Convocations', parseContent(convocations), 'col-convocations');
-        }
-        if (hasA) {
-            html += makeSection('Arriv\u00e9es', parseContent(arrivees), 'col-arrivees');
-        }
-        if (hasD) {
-            html += makeSection('D\u00e9parts', parseContent(departs), 'col-departs');
-        }
+        if (hasR) html += makeSection('Rappel de la semaine', parseRappels(rappels), 'col-rappels');
+        if (hasP) html += makeSection('Promotions', parseContent(promotions), 'col-promotions');
+        if (hasC) html += makeSection('Convocations', parseContent(convocations), 'col-convocations');
+        if (hasA) html += makeSection('Arriv\u00e9es', parseContent(arrivees), 'col-arrivees');
+        if (hasD) html += makeSection('D\u00e9parts', parseContent(departs), 'col-departs');
 
         docBody.innerHTML = html || '<p class="doc-placeholder">Remplissez le formulaire...</p>';
     }
@@ -224,6 +228,7 @@
     });
 
     // ---- Init ----
+    setupLogoFallbacks();
     load();
     render();
 
