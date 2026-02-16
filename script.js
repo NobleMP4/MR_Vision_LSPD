@@ -282,15 +282,18 @@
             html += '<div class="doc-subcategory">Corps d\'applications</div>';
             for (var i = 0; i < corps.length; i++) {
                 var e = corps[i];
-                var text = '';
-                if (e.name) text += e.name;
-                if (e.grade) text += ' \u2014 ' + e.grade;
-                if (e.matricule) text += ' (' + e.matricule + ')';
+                var nameText = '';
+                if (e.matricule) nameText += e.matricule + ' | ';
+                nameText += e.name || '';
+                var gradeText = e.grade || '';
                 var stars = gradeStars(e.grade);
-                if (text) {
+                if (nameText || gradeText) {
                     html += '<div class="doc-entry-promo">' +
                         '<span class="star-left">\u2605</span>' +
-                        '<span class="promo-text">' + escapeHTML(text) + '</span>' +
+                        '<span class="promo-text">' +
+                            '<span class="promo-name">' + escapeHTML(nameText) + '</span>' +
+                            '<span class="promo-grade">' + escapeHTML(gradeText) + '</span>' +
+                        '</span>' +
                         '<span class="star-right">' + makeStars(stars) + '</span>' +
                         '</div>';
                 }
@@ -302,15 +305,19 @@
             html += '<div class="doc-subcategory">Division</div>';
             for (var j = 0; j < div.length; j++) {
                 var d = div[j];
-                var dtext = '';
-                if (d.name) dtext += d.name;
-                if (d.grade) dtext += ' \u2014 ' + d.grade;
-                if (d.division) dtext += ' (' + d.division + ')';
-                if (d.matricule) dtext += ' [' + d.matricule + ']';
-                if (dtext) {
+                var dname = '';
+                if (d.matricule) dname += d.matricule + ' | ';
+                dname += d.name || '';
+                var dgrade = '';
+                if (d.grade) dgrade += d.grade;
+                if (d.division) dgrade += ' \u2014 ' + d.division;
+                if (dname || dgrade) {
                     html += '<div class="doc-entry-promo">' +
                         '<span class="star-left">\u2605</span>' +
-                        '<span class="promo-text">' + escapeHTML(dtext) + '</span>' +
+                        '<span class="promo-text">' +
+                            '<span class="promo-name">' + escapeHTML(dname) + '</span>' +
+                            '<span class="promo-grade">' + escapeHTML(dgrade) + '</span>' +
+                        '</span>' +
                         '<span class="star-right">\u2605\u2605</span>' +
                         '</div>';
                 }
@@ -486,10 +493,12 @@
         }
         col2 += makeSection('Arriv\u00e9es / D\u00e9parts', arrDepHTML);
 
-        // Column 3: Rappels + Convocations
+        // Column 3: Badge icon + Rappels + Convocations + Badge icon
         var col3 = '';
+        col3 += '<div class="doc-badge-icon">\ud83d\udee1</div>';
         col3 += makeSection('Rappels', parseRappels(fieldRappels.value));
         col3 += makeSection('Convocations', renderConvocations());
+        col3 += '<div class="doc-badge-icon">\ud83d\udee1</div>';
 
         var html = '';
         html += '<div class="doc-column">' + col1 + '</div>';

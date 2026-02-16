@@ -188,8 +188,8 @@ body {
 
 /* ==============================================
    THE DOCUMENT — 1920x1080
-   LSPD Mockup style: dark navy, cyan line,
-   white separators, bordered date box
+   Exact mockup replica: dark gradient bg,
+   blue banner header, cyan line, bordered body
    ============================================== */
 #document {
     width: 1920px;
@@ -199,41 +199,43 @@ body {
     position: relative;
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
-    background: #060a12;
+    /* Dark radial gradient — darker edges, slightly lighter center */
+    background: radial-gradient(ellipse at 50% 50%, #0c1628 0%, #070c18 50%, #040810 100%);
 }
 
-/* ---- Header (blue banner bar) ---- */
+/* ---- Header (dark blue banner bar) ---- */
 .doc-header {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 50px 18px;
+    padding: 18px 44px 16px;
     z-index: 6;
-    background: linear-gradient(180deg, #0e1a2e 0%, #0c1626 100%);
+    background: linear-gradient(180deg, #101e38 0%, #0c1830 60%, #0a1424 100%);
 }
 
 .doc-header-left {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 22px;
 }
 
 .doc-logo {
-    width: 85px;
-    height: 85px;
+    width: 80px;
+    height: 80px;
     object-fit: contain;
     flex-shrink: 0;
 }
 
 .doc-header-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 800;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    line-height: 1.15;
+    letter-spacing: 3px;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .doc-header-right {
@@ -243,152 +245,173 @@ body {
 
 .doc-header-datebox {
     font-family: 'Montserrat', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 8px;
-    padding: 12px 28px;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    border-radius: 6px;
+    padding: 10px 24px;
     white-space: nowrap;
 }
 
 /* ---- Cyan separator line (full width) ---- */
 .doc-header-line {
     height: 3px;
-    background: #00d4ff;
+    background: #00cfff;
     z-index: 6;
+    box-shadow: 0 0 12px rgba(0, 207, 255, 0.4);
 }
 
-/* ---- Content grid ---- */
+/* ---- Content area (bordered frame) ---- */
 .doc-main {
     position: absolute;
-    top: 148px;
-    left: 50px;
-    right: 50px;
-    bottom: 30px;
+    top: 130px;
+    left: 36px;
+    right: 36px;
+    bottom: 24px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 0;
     z-index: 5;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
 }
 
 /* ---- Column containers ---- */
 .doc-column {
     display: flex;
     flex-direction: column;
-    padding: 12px 28px 0;
+    padding: 18px 24px 12px;
     overflow: hidden;
 }
 .doc-column:not(:first-child) {
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* ---- Section blocks ---- */
 .doc-section {
     display: flex;
     flex-direction: column;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 /* Section header — white underline */
 .doc-section-header {
     background: none;
-    padding: 0 0 8px 0;
+    padding: 0 0 7px 0;
     text-align: center;
-    margin-bottom: 12px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .doc-section-header span {
     font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
 }
 
 /* Section content */
 .doc-section-content {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 400;
     color: #ffffff;
-    line-height: 1.55;
+    line-height: 1.5;
     padding: 0;
 }
 
-/* Subcategory headers (e.g. "Corps d'applications", "Superviseur") */
+/* Subcategory headers */
 .doc-subcategory {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
-    letter-spacing: 1px;
-    margin-top: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    margin-top: 10px;
     margin-bottom: 4px;
     text-transform: uppercase;
     text-align: center;
 }
 
 /* Spacer */
-.doc-spacer { height: 8px; }
+.doc-spacer { height: 6px; }
 
 /* ---- Entry styles ---- */
 
-/* Promotion entry — star on left, text, stars on right */
+/* Promotion entry — ★ name / grade ★★ (2 lines) */
 .doc-entry-promo {
     color: #ffffff;
-    font-size: 16px;
-    line-height: 1.7;
-    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
+    padding: 4px 0;
 }
 .doc-entry-promo .star-left {
-    color: #c0c0c0;
-    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
     flex-shrink: 0;
 }
 .doc-entry-promo .promo-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: center;
+    line-height: 1.3;
+}
+.doc-entry-promo .promo-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    display: block;
+}
+.doc-entry-promo .promo-grade {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
 }
 .doc-entry-promo .star-right {
-    color: #c0c0c0;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
     flex-shrink: 0;
+    letter-spacing: 1px;
 }
 
 /* Generic entry line */
 .doc-entry {
     color: #ffffff;
-    font-size: 16px;
-    line-height: 1.7;
+    font-size: 14px;
+    line-height: 1.65;
     text-align: center;
 }
 
 /* Arrival entry — green dots left + right */
 .doc-entry-arrival {
     color: #ffffff;
-    font-size: 16px;
-    line-height: 1.7;
+    font-size: 14px;
+    line-height: 1.65;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 1px 0;
+    padding: 2px 0;
 }
-.doc-entry-arrival .dot-left,
-.doc-entry-arrival .dot-right {
-    width: 10px;
-    height: 10px;
+.doc-entry-arrival .dot-left {
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background: #2ecc71;
+    background: #27ae60;
+    flex-shrink: 0;
+}
+.doc-entry-arrival .dot-right {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #27ae60;
     flex-shrink: 0;
 }
 .doc-entry-arrival .entry-text {
@@ -399,19 +422,26 @@ body {
 /* Departure entry — red dots left + right */
 .doc-entry-departure {
     color: #ffffff;
-    font-size: 16px;
-    line-height: 1.7;
+    font-size: 14px;
+    line-height: 1.65;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 1px 0;
+    padding: 2px 0;
 }
-.doc-entry-departure .dot-left,
-.doc-entry-departure .dot-right {
-    width: 10px;
-    height: 10px;
+.doc-entry-departure .dot-left {
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background: #e74c3c;
+    border: 2px solid #c0392b;
+    background: transparent;
+    flex-shrink: 0;
+}
+.doc-entry-departure .dot-right {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #c0392b;
     flex-shrink: 0;
 }
 .doc-entry-departure .entry-text {
@@ -422,30 +452,39 @@ body {
 /* Rappel line (bullet point) */
 .doc-rappel {
     color: #ffffff;
-    font-size: 16px;
-    line-height: 1.7;
-    padding-left: 16px;
+    font-size: 14px;
+    line-height: 1.75;
+    padding-left: 18px;
     position: relative;
 }
 .doc-rappel::before {
     content: '\2022';
     position: absolute;
-    left: 0;
-    color: rgba(255, 255, 255, 0.6);
+    left: 4px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
 }
 
 /* Convocation entry */
 .doc-entry-conv {
     color: #ffffff;
-    font-size: 16px;
-    line-height: 1.7;
+    font-size: 14px;
+    line-height: 1.65;
     text-align: center;
+}
+
+/* Badge icon (shield emoji for col3) */
+.doc-badge-icon {
+    text-align: center;
+    font-size: 28px;
+    padding: 8px 0;
+    opacity: 0.4;
 }
 
 /* ---- Placeholder ---- */
 .doc-placeholder {
     grid-column: 1 / -1;
-    color: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.10);
     font-style: italic;
     text-align: center;
     font-size: 18px;
