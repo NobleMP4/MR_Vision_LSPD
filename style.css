@@ -188,8 +188,8 @@ body {
 
 /* ==============================================
    THE DOCUMENT — 1920x1080
-   Exact mockup replica: dark gradient bg,
-   blue banner header, cyan line, bordered body
+   Grey background, floating blue banner,
+   cyan line, bordered content box
    ============================================== */
 #document {
     width: 1920px;
@@ -199,19 +199,22 @@ body {
     position: relative;
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
-    /* Dark radial gradient — darker edges, slightly lighter center */
-    background: radial-gradient(ellipse at 50% 50%, #0c1628 0%, #070c18 50%, #040810 100%);
+    /* Grey background */
+    background: #3b3b3b;
+    padding: 28px 40px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* ---- Header (dark blue banner bar) ---- */
+/* ---- Header (floating blue banner bar) ---- */
 .doc-header {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 44px 16px;
+    padding: 18px 40px;
     z-index: 6;
-    background: linear-gradient(180deg, #101e38 0%, #0c1830 60%, #0a1424 100%);
+    background: linear-gradient(180deg, #122040 0%, #0e1a34 50%, #0b1528 100%);
+    border-radius: 6px 6px 0 0;
 }
 
 .doc-header-left {
@@ -221,15 +224,15 @@ body {
 }
 
 .doc-logo {
-    width: 80px;
-    height: 80px;
+    width: 76px;
+    height: 76px;
     object-fit: contain;
     flex-shrink: 0;
 }
 
 .doc-header-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
     color: #ffffff;
     text-transform: uppercase;
@@ -245,39 +248,37 @@ body {
 
 .doc-header-datebox {
     font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    border: 2px solid rgba(255, 255, 255, 0.45);
+    border: 2px solid rgba(255, 255, 255, 0.4);
     border-radius: 6px;
-    padding: 10px 24px;
+    padding: 10px 22px;
     white-space: nowrap;
 }
 
-/* ---- Cyan separator line (full width) ---- */
+/* ---- Cyan separator line ---- */
 .doc-header-line {
     height: 3px;
     background: #00cfff;
     z-index: 6;
-    box-shadow: 0 0 12px rgba(0, 207, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 207, 255, 0.35);
 }
 
-/* ---- Content area (bordered frame) ---- */
+/* ---- Content area (bordered dark box) ---- */
 .doc-main {
-    position: absolute;
-    top: 130px;
-    left: 36px;
-    right: 36px;
-    bottom: 24px;
+    flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 0;
     z-index: 5;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 4px;
+    background: #0b1528;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0 0 6px 6px;
+    min-height: 0;
 }
 
 /* ---- Column containers ---- */
