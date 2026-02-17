@@ -25,18 +25,26 @@ body {
     display: flex;
     gap: 2rem;
     align-items: flex-start;
-    max-width: 1600px;
+    max-width: 100%;   /* prend toute la largeur disponible */
     margin: 0 auto;
+}
+
+.screen-container {
+    flex: 1 1 auto;                /* prend tout l'espace restant */
+    min-width: 0;                  /* pour éviter débordement */
+    display: flex;
+    justify-content: center;
+    height: calc(100vh - 3rem);    /* même hauteur que le form (top + padding) */
 }
 
 /* ---------- Editor ---------- */
 #editor-panel {
-    flex: 0 0 420px;
+    flex: 0 0 420px;               /* largeur fixe */
     position: sticky;
     top: 1.5rem;
     max-height: calc(100vh - 3rem);
     overflow-y: auto;
-    background: #1a1a2a;
+    background: #1a1a2a;           /* conserve le fond */
     border-radius: 8px;
     padding: 1.4rem;
     border: 1px solid #2a2a3a;
@@ -182,14 +190,22 @@ body {
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap');
 
 .ui-panel {
-    width: 1050px;
-    height: 520px;
+    width: 100%;                   /* prend la largeur du parent */
+    max-width: 100%;
+    height: 100%;                  /* prend toute la hauteur de screen-container */
     background: linear-gradient(180deg, #0f2147 0%, #050a16 100%);
     position: relative;
     box-shadow: 0 30px 60px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
 }
+
+
+.ui-panel > * {
+    width: 100%;
+    height: calc(100% * 9 / 16); /* hauteur = largeur * 9/16 */
+}
+
 
 /* HEADER */
 .lspd-header {
@@ -232,34 +248,85 @@ body {
 }
 
 .summary-box {
-    background: #fff;
-    color: #141d26;
-    padding: 0 50px;
+    position: relative;
     display: flex;
+    justify-content: center;
     align-items: center;
+    padding: 0 40px;
+    min-width: 200px;
+    height: 55px;
+    box-sizing: border-box;
+    background-color: transparent; /* transparent, on met l'SVG derrière */
+    margin-right: 100px;
+}
+
+#summary-date .summary-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+#summary-date .summary-text {
+    position: relative;
+    z-index: 1;
+    color: #141d26;
     font-weight: 700;
     font-size: 19px;
-    clip-path: polygon(25px 0%, 100% 0%, calc(100% - 25px) 100%, 0% 100%);
+    text-align: center;
+    white-space: nowrap;
 }
+
 
 /* GRILLE */
 .main-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr; /* trois colonnes égales */
+    grid-template-rows: 1fr;        /* deux lignes qui prennent toute la hauteur disponible */
+    gap: 20px 15px;                     /* gap row x column */
+    grid-template-areas:
+        "promotions stripes arrivals"
+        "departures convocations rappels";
     flex-grow: 1;
-    padding: 30px 20px 20px 20px;
+    padding: 20px;
+    height: 100%;                       /* s'assure que la grid prend toute la hauteur de la preview */
+}
+
+#promotions-container { grid-area: promotions; }
+#stripes-container { grid-area: stripes; }
+#arrivals-container { grid-area: arrivals; }
+#departures-container { grid-area: departures; }
+#rappels-container { grid-area: rappels; }
+#convocations-container { grid-area: convocations; }
+
+.main-grid section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .col {
-    padding: 0 15px;
-    position: relative;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1.2fr 0.9fr; /* section haut = 1.2, section bas = 0.8 */
+    height: 100%;
+    gap: 15px;
 }
 
+
+.col > section:first-of-type {
+    overflow: hidden; /* plus de défilement */
+}
+
+.col > section.bottom-section {
+    overflow: hidden; /* plus de défilement */
+}
+
+/* Section du bas (bottom-section) : on laisse un petit gap au-dessus */
 .bottom-section {
-    margin-top: 15px;
+    /* plus besoin de margin-top: auto */
+    margin-top: 0;
 }
 
 .v-divider::before {
@@ -336,7 +403,6 @@ h3 {
     letter-spacing: 0.4px;
 }
 
-
 /* =========================
    SERVICE STRIPES — même style que départs
    ========================= */
@@ -344,7 +410,6 @@ h3 {
 .stripes {
     display: none; /* on cache les ///// old school */
 }
-
 
 /* =========================
    DOTS CEREMONIAL STYLE
@@ -369,7 +434,6 @@ h3 {
 .star { display: none; } /* on retire les étoiles */
 .stars-right { display: none; }
 
-
 /* LISTS (Rappels) */
 .list { list-style: none; padding-left: 15px; margin: 0; }
 .list li { font-size: 11px; color: #cbd5e0; margin-bottom: 8px; position: relative; }
@@ -378,12 +442,10 @@ h3 {
 /* CONVOCATIONS */
 .convocation .icon { font-size: 18px; margin-right: 10px; opacity: 0.8; }
 
-
-
 .stripe-item {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* space-between peut casser html2canvas */
+    justify-content: space-between;
     gap: 6px;
     margin-bottom: 6px;
     font-size: 12.5px;
@@ -395,12 +457,8 @@ h3 {
 
 .stripe-slashes {
     font-weight: bold;
-    color: #fff; /* s'assurer que html2canvas prend bien la couleur */
+    color: #fff;
 }
-
-
-
-
 
 /* ==============================================
    RESPONSIVE

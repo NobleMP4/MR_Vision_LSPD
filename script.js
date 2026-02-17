@@ -245,7 +245,9 @@
     // ---- Render ----
     function render() {
         // DATE
-        document.getElementById("summary-date").textContent = fieldDate.value.trim() || "N/A";
+        document.querySelector("#summary-date .summary-text").textContent =
+            fieldDate.value.trim() || "N/A";
+
 
         // PROMOTIONS
         var promoContainer = document.getElementById("promotions-container");
