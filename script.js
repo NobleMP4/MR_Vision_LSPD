@@ -38,7 +38,7 @@
         'Métro': ['CS In Charge'],
         'SWAT': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier'],
         'K-9': ['CS In Charge', 'Assistant Commanding Officier', 'Assistant Commanding Officier'],
-        'Police Academy': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier', 'Instructeur Confirmer', 'Instructeur'],
+        'Police Academy': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier', 'Instructeur Confirmé', 'Instructeur'],
         'Administrative Service Bureau': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier'],
         'Crisis Negociation Team': ['CS In Charge', 'CS In Charge', 'Assistant Commanding Officier'],
         'Media Relation Division': ['CS In Charge', 'Commanding Officer', 'Assistant Commanding Officier'],
@@ -259,7 +259,7 @@
             promoContainer.innerHTML = `<div class="item status"><span class="center-name">N/A</span></div>`;
         } else {
             if (corpsList.length > 0) {
-                promoContainer.innerHTML += `<h3>CORPS D'APPLICATIONS</h3>`;
+                promoContainer.innerHTML += `<h3>CORPS D'APPLICATION</h3>`;
                 corpsList.forEach(function(p){
                     promoContainer.innerHTML += `
                     <div class="item status">
@@ -271,7 +271,7 @@
                 });
             }
             if (divList.length > 0) {
-                promoContainer.innerHTML += `<h3>DIVISION</h3>`;
+                promoContainer.innerHTML += `<h3>DIVISIONS</h3>`;
                 divList.forEach(function(p){
                     promoContainer.innerHTML += `
                     <div class="item status">
