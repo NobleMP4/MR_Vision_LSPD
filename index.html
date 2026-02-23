@@ -26,8 +26,27 @@
 
             <!-- Rappels -->
             <div class="form-group">
-                <label for="field-rappels">Rappels de la supervision</label>
-                <textarea id="field-rappels" rows="5" placeholder="Un point par ligne..."></textarea>
+                <div class="group-header">
+                    <label>Rappels — Supervision</label>
+                    <button type="button" class="btn-add" id="btn-add-rappel-sup" title="Ajouter">+</button>
+                </div>
+                <div id="list-rappels-sup" class="dynamic-list"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="group-header">
+                    <label>Rappels — Watch Commander</label>
+                    <button type="button" class="btn-add" id="btn-add-rappel-wc" title="Ajouter">+</button>
+                </div>
+                <div id="list-rappels-wc" class="dynamic-list"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="group-header">
+                    <label>Rappels — Command Staff</label>
+                    <button type="button" class="btn-add" id="btn-add-rappel-cs" title="Ajouter">+</button>
+                </div>
+                <div id="list-rappels-cs" class="dynamic-list"></div>
             </div>
 
             <!-- Promotions — Corps d'applications -->

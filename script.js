@@ -47,7 +47,9 @@
 
     // ---- DOM refs ----
     var fieldDate     = document.getElementById('field-date');
-    var fieldRappels  = document.getElementById('field-rappels');
+    var listRappelsSup = document.getElementById('list-rappels-sup');
+    var listRappelsWC  = document.getElementById('list-rappels-wc');
+    var listRappelsCS  = document.getElementById('list-rappels-cs');
     var fieldArrivees = document.getElementById('field-arrivees');
     var fieldDeparts  = document.getElementById('field-departs');
 
@@ -181,6 +183,15 @@
         onInput();
     }
 
+    function addRappelRow(list, data) {
+        var row = document.createElement('div');
+        row.className = 'entry-row';
+        row.appendChild(makeInput('field-rappel-text', 'Texte du rappel...', data && data.text));
+        row.appendChild(makeRemoveBtn(row));
+        list.appendChild(row);
+        onInput();
+    }
+
     function addStripeRow(data) {
         var row = document.createElement('div');
         row.className = 'entry-row';
@@ -199,6 +210,9 @@
     document.getElementById('btn-add-conv-sup').addEventListener('click', function () { addConvRow(listConvSup); });
     document.getElementById('btn-add-conv-wc').addEventListener('click', function () { addConvRow(listConvWC); });
     document.getElementById('btn-add-conv-cs').addEventListener('click', function () { addConvRow(listConvCS); });
+    document.getElementById('btn-add-rappel-sup').addEventListener('click', function () { addRappelRow(listRappelsSup); });
+    document.getElementById('btn-add-rappel-wc').addEventListener('click', function () { addRappelRow(listRappelsWC); });
+    document.getElementById('btn-add-rappel-cs').addEventListener('click', function () { addRappelRow(listRappelsCS); });
 
     // ---- Read entries from DOM ----
     function readPromoCorps() {
@@ -209,6 +223,12 @@
                 name: row.querySelector('.field-name').value.trim()
             };
         }).filter(e => e.grade || e.matricule || e.name);
+    }
+
+    function readRappelEntries(list) {
+        return Array.from(list.querySelectorAll('.entry-row')).map(row => {
+            return { text: row.querySelector('.field-rappel-text').value.trim() };
+        }).filter(e => e.text);
     }
 
     function readPromoDiv() {
@@ -334,13 +354,25 @@
         // RAPPELS
         var rappelsContainer = document.getElementById("rappels-container");
         rappelsContainer.innerHTML = "";
-        var rappelsList = fieldRappels.value.split("\n").filter(line => line.trim() !== "");
-        if (rappelsList.length === 0) {
+        var rSup = readRappelEntries(listRappelsSup);
+        var rWC  = readRappelEntries(listRappelsWC);
+        var rCS  = readRappelEntries(listRappelsCS);
+
+        if (rSup.length === 0 && rWC.length === 0 && rCS.length === 0) {
             rappelsContainer.innerHTML = `<div class="center-name">N/A</div>`;
         } else {
-            rappelsList.forEach(function(line){
-                rappelsContainer.innerHTML += `<li>${escapeHTML(line)}</li>`;
-            });
+            var renderRSub = function(title, items) {
+                if (items.length > 0) {
+                    rappelsContainer.innerHTML += `<h3>${title}</h3><ul class="list">`;
+                    items.forEach(function(r) {
+                        rappelsContainer.innerHTML += `<li>${escapeHTML(r.text)}</li>`;
+                    });
+                    rappelsContainer.innerHTML += `</ul>`;
+                }
+            };
+            renderRSub("SUPERVISION", rSup);
+            renderRSub("WATCH COMMANDER", rWC);
+            renderRSub("COMMAND STAFF", rCS);
         }
 
         // CONVOCATIONS
@@ -378,7 +410,9 @@
     function save() {
         var data = {
             date: fieldDate.value,
-            rappels: fieldRappels.value,
+            rappelsSup: readRappelEntries(listRappelsSup),
+            rappelsWC: readRappelEntries(listRappelsWC),
+            rappelsCS: readRappelEntries(listRappelsCS),
             promoCorps: readPromoCorps(),
             promoDiv: readPromoDiv(),
             stripes: readStripes(),
@@ -397,7 +431,10 @@
             if (!raw) return;
             var d = JSON.parse(raw);
             if (d.date) fieldDate.value = d.date;
-            if (d.rappels) fieldRappels.value = d.rappels;
+            // Nouveaux rappels
+            if (d.rappelsSup) d.rappelsSup.forEach(r => addRappelRow(listRappelsSup, r));
+            if (d.rappelsWC) d.rappelsWC.forEach(r => addRappelRow(listRappelsWC, r));
+            if (d.rappelsCS) d.rappelsCS.forEach(r => addRappelRow(listRappelsCS, r));
             if (d.promoCorps) d.promoCorps.forEach(addPromoCorpsRow);
             if (d.promoDiv) d.promoDiv.forEach(addPromoDivRow);
             if (d.stripes) d.stripes.forEach(addStripeRow);
@@ -417,20 +454,25 @@
         saveTimer = setTimeout(save, 400);
     }
 
-    [fieldDate, fieldRappels, fieldArrivees, fieldDeparts].forEach(f => f.addEventListener('input', onInput));
+    // On écoute la date, les arrivées et départs
+    [fieldDate, fieldArrivees, fieldDeparts].forEach(f => {
+        if (f) f.addEventListener('input', onInput);
+    });
 
     btnReset.addEventListener('click', function () {
         if (!confirm('Réinitialiser tous les champs ?')) return;
-        fieldDate.value = '';
-        fieldRappels.value = '';
-        fieldArrivees.value = '';
-        fieldDeparts.value = '';
-        listPromoCorps.innerHTML = '';
-        listPromoDiv.innerHTML = '';
-        listStripes.innerHTML = '';
-        listConvSup.innerHTML = '';
-        listConvWC.innerHTML = '';
-        listConvCS.innerHTML = '';
+
+        if (fieldDate) fieldDate.value = '';
+        if (fieldArrivees) fieldArrivees.value = '';
+        if (fieldDeparts) fieldDeparts.value = '';
+
+        // Vider toutes les listes dynamiques
+        [listPromoCorps, listPromoDiv, listStripes,
+            listConvSup, listConvWC, listConvCS,
+            listRappelsSup, listRappelsWC, listRappelsCS].forEach(list => {
+            if (list) list.innerHTML = '';
+        });
+
         try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
         render();
     });
